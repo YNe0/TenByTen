@@ -1,0 +1,6 @@
+﻿  1234.cpp
+C:\Users\User\Desktop\1234\1234\1234.cpp(44,15): warning C4838: 'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
+C:\Users\User\Desktop\1234\1234\1234.cpp(44,18): warning C4838: 'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
+C:\Users\User\Desktop\1234\1234\1234.cpp(51,7): warning C4551: 함수 호출에 인수 목록이 없습니다.
+C:\Users\User\Desktop\1234\1234\1234.cpp(522,10): warning C4566: 유니버설 문자 이름 '\u21B2'(으)로 표현되는 문자는 현재 코드 페이지(949)에서 표현할 수 없습니다.
+  1234.vcxproj -> C:\Users\User\Desktop\1234\x64\Debug\1234.exe
