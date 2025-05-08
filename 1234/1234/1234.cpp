@@ -30,6 +30,8 @@ void textcolor(int foreground, int background)
 	int color = foreground + background * 16;
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
+
+주석 변경 테스트
 */
 
 void cursor_view(bool playing)
