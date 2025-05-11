@@ -1,12 +1,16 @@
-﻿#include<iostream>
+#include<iostream>
 #include<Windows.h>
 #include<conio.h>
 #include<vector>
 #include<math.h>
-#include<array> 
-#include<cstdlib> 
+#include<array>
+#include<cstdlib>
 #include<ctime>
 #include<string>
+#include <fstream>
+
+
+
 
 using namespace std;
 constexpr int board_row = 10;
@@ -23,17 +27,64 @@ constexpr int block_col = 5;
 #define k_2 7
 #define k_3 8
 #define k_back 9
+#define test_key 10
+
 
 /*
 void textcolor(int foreground, int background)
 {
 	int color = foreground + background * 16;
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
-	test
+}
+*/
+
+
+void gotoxy(int x, int y) {
+    COORD pos = { (SHORT)x, (SHORT)y }; 
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
-주석 변경 테스트
-*/
+int show_point(int point, int& high_score) {
+	int x = 70;
+	int y = 0;
+	gotoxy(x, y);
+	cout << "Point : ";
+	gotoxy(x + 8, y);
+	cout << point;
+
+	// 하이스코어 업데이트
+	if (point > high_score) {
+		high_score = point;
+		gotoxy(x, y + 1);
+		cout << "New High Score!";
+	}
+
+	gotoxy(x, y + 2);
+	cout << "High Score : " << high_score;
+
+	point++;
+	return point;
+}
+
+void save_high_score(int high_score) {
+	ofstream file("highscore.txt");
+	if (file.is_open()) {
+		file << high_score;
+		file.close();
+	}
+}
+int load_high_score() {
+	ifstream file("highscore.txt");
+	int high_score = 0;
+	if (file.is_open()) {
+		file >> high_score;
+		file.close();
+	}
+	return high_score;
+}
+
+
+
 
 void cursor_view(bool playing)
 {
@@ -43,13 +94,10 @@ void cursor_view(bool playing)
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
 }
 
-void gotoxy(int x, int y) {
-	COORD pos = {x, y};
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
-}
+
 
 int key_control() {
-	char key = ' ';
+	char key;
 	while (1) {
 		if (_kbhit) {
 			key = _getch();
@@ -75,11 +123,15 @@ int key_control() {
 		if (key == 50) { // 2
 			return k_2;
 		}
-		if (key == 51) { // 3
+		if (key == 57) { // 3
 			return k_3;
 		}
 		if (key == 8) { // backspace
 			return k_back;
+
+		}
+		if (key == 92) {
+			return test_key;
 		}
 	}
 }
@@ -87,22 +139,23 @@ int key_control() {
 void draw_board(char*** board);
 void main_board(char*** board);
 int draw_info();
+int showRanking();
 void draw_title();
 int main_menu();
 int game_menu();
 int move_menu(int x, int y, int le);
-int show_point(int point);
 void main_block(char*** block);
 void show_block(char*** f_block, char*** s_block, char*** t_block);
 void create_block(char*** block);
 void draw_block(int x, int y, char*** block);
-void put_block(char*** board, char*** block, int x, int y);
-void clean_board(char*** board);
-void set_block(char*** board);
+void input_ranking(string name, int score);
 
 int main() {
 	int key = -1;
 	bool playing = true;
+
+	int high_score = load_high_score(); // 하이스코어 로드
+	int total_point = 0;
 
 	char*** m_board = new char** [board_row]; // 메인 보드
 	for (int i = 0; i < board_row; i++)
@@ -111,7 +164,6 @@ int main() {
 	char*** f_block = new char** [block_row]; // 1번 블럭
 	for (int i = 0; i < block_row; i++)
 		f_block[i] = new char* [block_col];
-
 	char*** s_block = new char** [block_row]; // 2번 블럭
 	for (int i = 0; i < block_row; i++)
 		s_block[i] = new char* [block_col];
@@ -121,6 +173,9 @@ int main() {
 		t_block[i] = new char* [block_col];
 
 	main_board(m_board);
+	main_block(f_block);
+	main_block(s_block);
+	main_block(t_block);
 	cursor_view(false);
 
 	while (1) {
@@ -132,72 +187,40 @@ int main() {
 			draw_title();
 			int game_num = game_menu();
 			if (game_num == 0) {
-				int total_point = 0;
-				int x = 5;
-				int y = 5;
+				total_point = 0; // 스코어 초기화
 				while (1) {
 					draw_board(m_board);
-					main_block(f_block);
-					main_block(s_block);
-					main_block(t_block);
-					total_point = show_point(total_point);
+					total_point = show_point(total_point, high_score); // 스코어 업데이트
 					create_block(f_block);
 					create_block(s_block);
 					create_block(t_block);
 					show_block(f_block, s_block, t_block);
 					key = key_control();
-					if (key == k_1) {
-						put_block(m_board, f_block, x, y);
-						while (1) {
-							clean_board(m_board);
-							put_block(m_board, f_block, x, y);
-							draw_board(m_board);
-							int move_k = key_control();
-							if (move_k == k_up) {
-								x--;
-								if (x < 0) {
-									x++;
-								}
-							}
-							else if (move_k == k_down) {
-								x++;
-								if (x > 9) {
-									x--;
-								}
-							}
-							else if (move_k == k_right) {
-								y--;
-								if (y < 0) {
-									y++;
-								}
-							}
-							else if (move_k == k_left) {
-								y++;
-								if (y > 9) {
-									y--;
-								}
-							}
-							else if (move_k == k_enter) {
-								set_block(m_board);
-								draw_board(m_board);
-								break;
-							}
-						}
+					if (key == 9) {
+						save_high_score(high_score); // 게임 종료 시 하이스코어 저장
+						break;
 					}
-					else if (key == k_2) {
-						put_block(m_board, s_block, 5, 5);
-					}
-					else if (key == k_3) {
-						put_block(m_board, t_block, 5, 5);
-					}
-					else if (key == k_back) {
+					else if (key == test_key) // 게임오버 출력 테스트
+					{
+						system("cls");
+						int x = 50;
+						int y = 8;
+						gotoxy(x, y);
+						cout << "게임오버 ! " <<endl;
+						cout << "(다시하고싶으면 backSpace를 누르시오) " << endl;
+						string name;
+						cout << "닉네임을 입력하세요: ";
+						cin >> name;
+						input_ranking(name, total_point);
+						int key = key_control();
+						
 						break;
 					}
 				}
 			}
 		}
 
-		else if(menu_num == 1){
+		else if (menu_num == 1) {
 			while (1) {
 				int info_num = draw_info();
 				if (info_num == 9)
@@ -206,10 +229,23 @@ int main() {
 		}
 
 		else if (menu_num == 2) {
+			cout << "랭킹 : ";
+
+			while (1) {
+				int info_num = showRanking();
+				if (info_num == 9)
+					break;
+			}
+		
+		}
+
+		else if (menu_num == 3) {
+			save_high_score(high_score); // 프로그램 종료 시 하이스코어 저장
 			break;
 		}
 	}
 }
+
 
 void draw_title() {
 	system("cls");
@@ -233,13 +269,16 @@ void draw_title() {
 int main_menu() {
 	int x = 58;
 	int y = 16;
-	int le = 3; // 메뉴 갯수
+	int le = 4; // 메뉴 갯수 증가 (4개)
 	gotoxy(x - 2, y);
 	cout << "> 게임시작";
 	gotoxy(x, y + 1);
-	cout << "게임정보";
+	cout << "게임정보"; // 기존 메뉴
 	gotoxy(x, y + 2);
+	cout << "점수보기"; // 새로운 메뉴 추가   cout << "게임정보";
+	gotoxy(x, y + 3);
 	cout << "  종료  ";
+
 	int i = move_menu(x, y, le);
 	return i;
 }
@@ -275,7 +314,7 @@ int move_menu(int x, int y, int le) {
 			break;
 		}
 		case k_down: {
-			if (y1 < y+le-1) { // 위로 이동
+			if (y1 < y + le - 1) { // 위로 이동
 				gotoxy(x - 2, y1);
 				printf(" ");
 				gotoxy(x - 2, ++y1);
@@ -330,7 +369,7 @@ void draw_board(char*** board) {
 		cout << "|";
 		for (int i = 0; i < board_row; ++i) {
 			cout << "_____|";
-		}	
+		}
 		cout << endl;
 	}
 }
@@ -341,12 +380,12 @@ void show_block(char*** f_block, char*** s_block, char*** t_block) {
 	gotoxy(x, y);
 	cout << "1";
 	draw_block(x, y, f_block);
-	gotoxy(x, y+9);
+	gotoxy(x, y + 9);
 	cout << "2";
-	draw_block(x, y+9, s_block);
-	gotoxy(x, y+18);
+	draw_block(x, y + 9, s_block);
+	gotoxy(x, y + 18);
 	cout << "3";
-	draw_block(x, y+18, t_block);
+	draw_block(x, y + 18, t_block);
 }
 
 void draw_block(int x, int y, char*** block) { // 보드에 블럭 그리기
@@ -476,53 +515,63 @@ void create_block(char*** block) { //블럭 생성
 	}
 }
 
-int show_point(int point) {
-	int x = 70;
-	int y = 0;
-	gotoxy(x, y);
-	cout << "Point : ";
-	gotoxy(x + 8, y);
-	cout << point;
-	point++;
-	return point;
-}
-
-void clean_board(char*** board) {
-	for (int i = 0; i < board_row; i++) {
-		for (int j = 0; j < board_col; j++) {
-			if (board[i][j] == "□") {
-				board[i][j] = (char*)" ";
-			}
-		}
-	}
-}
-
-void put_block(char*** board, char*** block, int x, int y) {
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 5; j++) {
-			if (block[i][j] == "■") {
-				board[x + j - 2][y + i - 2] = (char*)"□";
-			}
-		}
-	}
-}
-
-void set_block(char*** board){
-	for (int i = 0; i < board_row; i++) {
-		for (int j = 0; j < board_col; j++) {
-			if (board[i][j] == "□") {
-				board[i][j] = (char*)"■";
-			}
-		}
-	}
-}
-
 int draw_info() {
 	system("cls");
 	int x = 50;
 	int y = 8;
 	gotoxy(x, y);
-	cout << "→ ← ↑ ↓ ↲ 1 2 3";
+	cout << "→ ← ↑ ↓ ? 1 2 3";
 	int key = key_control();
 	return key;
+}
+
+
+struct Ranking {
+    string name;
+    int score;
+};
+
+
+int showRanking() {
+    system("cls");
+
+    vector<Ranking> rankings;
+    ifstream fin("ranking.txt");
+    Ranking r;
+    while (fin >> r.name >> r.score) {
+        rankings.push_back(r);
+    }
+    fin.close();
+
+    // 점수 기준 내림차순 정렬 (버블 정렬)
+    for (size_t i = 0; i < rankings.size(); i++) {
+        for (size_t j = 0; j < rankings.size() - 1; j++) {
+            if (rankings[j].score < rankings[j + 1].score) {
+                Ranking temp = rankings[j];
+                rankings[j] = rankings[j + 1];
+                rankings[j + 1] = temp;
+            }
+        }
+    }
+
+    cout << "=== 랭킹 ===" << endl;
+    for (size_t i = 0; i < rankings.size() && i < 10; i++) {
+        cout << i + 1 << "위: " << rankings[i].name << " - " << rankings[i].score << "점" << endl;
+    }
+
+    cout << "\nbackspace를 눌러 뒤로 가기" << endl;
+    int key;
+    while (1) {
+        key = key_control();
+        if (key == 9)
+            return 9;
+    }
+}
+
+void input_ranking(string name, int score) {
+	ofstream fout("ranking.txt", ios::app); // 추가 모드
+	if (fout.is_open()) {
+		fout << name << " " << score << endl;
+		fout.close();
+	}
 }
