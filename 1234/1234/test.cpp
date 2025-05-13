@@ -153,7 +153,7 @@ void move_and_place_block(char*** board, char*** block);
 int main() {
 	int key = -1;
 	bool playing = true;
-	bool block_used[3] = { false };
+	bool block_used[3] = { true, true, true };
 
 	int high_score = load_high_score(); // 하이스코어 로드
 	int total_point = 0;
@@ -193,11 +193,13 @@ int main() {
 				while (1) {
 					draw_board(m_board);
 					total_point = show_point(total_point, high_score);
-					if (!block_used[0] && !block_used[1] && !block_used[2]) {
+					if (block_used[0] && block_used[1] && block_used[2]) {
 						create_block(f_block);
 						create_block(s_block);
 						create_block(t_block);
-						block_used[0] = block_used[1] = block_used[2] = false;
+						block_used[0] = false;
+						block_used[1] = false;
+						block_used[2] = false;
 					}
 
 					show_block(f_block, s_block, t_block, block_used);
