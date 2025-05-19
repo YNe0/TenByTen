@@ -95,46 +95,39 @@ void cursor_view(bool playing)
 }
 
 
-
 int key_control() {
 	char key;
 	while (1) {
-		if (_kbhit) {
+		if (_kbhit()) {
 			key = _getch();
-		}
-		if (key == 72) { // 위
-			return k_up;
-		}
-		if (key == 80) { // 아래
-			return k_down;
-		}
-		if (key == 75) { // 오른쪽
-			return k_right;
-		}
-		if (key == 77) { // 왼쪽
-			return k_left;
-		}
-		if (key == 13) { // enter
-			return k_enter;
-		}
-		if (key == 49) { // 1
-			return k_1;
-		}
-		if (key == 50) { // 2
-			return k_2;
-		}
-		if (key == 51) { // 3
-			return k_3;
-		}
-		if (key == 8) { // backspace
-			return k_back;
-
-		}
-		if (key == 92) {
-			return test_key;
+			switch (key) {
+			case 72: // 위
+				return k_up;
+			case 80: // 아래
+				return k_down;
+			case 75: // 왼쪽
+				return k_left;
+			case 77: // 오른쪽
+				return k_right;
+			case 13: // Enter
+				return k_enter;
+			case '1': // 숫자 1
+				return k_1;
+			case '2': // 숫자 2
+				return k_2;
+			case '3': // 숫자 3
+				return k_3;
+			case 8: // Backspace
+				return k_back;
+			case 92: 
+				return test_key;
+			default:
+				break; // 다른 키는 무시
+			}
 		}
 	}
 }
+
 
 void draw_board(char*** board);
 void main_board(char*** board);
@@ -150,6 +143,7 @@ void create_block(char*** block);
 void draw_block(int x, int y, char*** block);
 void input_ranking(string name, int score);
 void move_and_place_block(char*** board, char*** block);
+bool canPlaceBlock(char*** board, char*** block, int x, int y);
 int main() {
 	int key = -1;
 	bool playing = true;
@@ -569,7 +563,6 @@ void set_block(char*** board) {
 void move_and_place_block(char*** m_board, char*** block) {
 	int x = 5;
 	int y = 5;
-
 	while (1) {
 		clean_board(m_board);
 		put_block(m_board, block, x, y);
@@ -577,32 +570,68 @@ void move_and_place_block(char*** m_board, char*** block) {
 
 		int move_k = key_control();
 
-		if (move_k == k_up) {
-			x--;
-			if (x < 0) x++;
-		}
-		else if (move_k == k_down) {
-			x++;
-			if (x > 9) x--;
-		}
-		else if (move_k == k_right) {
-			y--;
-			if (y < 0) y++;
-		}
-		else if (move_k == k_left) {
-			y++;
-			if (y > 9) y--;
-		}
-		else if (move_k == k_enter) {
-			set_block(m_board);
+		int new_x = x;
+		int new_y = y;
+
+		while (1) {
+			clean_board(m_board);
+			put_block(m_board, block, x, y);
 			draw_board(m_board);
-			break;
-		}
-		else if (move_k == k_back) {
-			break;
+
+			int move_k = key_control();
+
+			int new_x = x;
+			int new_y = y;
+
+			switch (move_k) {
+			case k_up:    new_x--; break;
+			case k_down:  new_x++; break;
+			case k_right: new_y++; break;
+			case k_left:  new_y--; break;
+			case k_enter:
+				set_block(m_board);
+				draw_board(m_board);
+				return;  // 혹은 break;
+			case k_back:
+				return;  // 혹은 break;
+			}
+
+			// 보드 범위 벗어나면 무시
+			if (new_x < 0 || new_x >= 10 || new_y < 0 || new_y >= 10)
+				continue;
+
+			if (canPlaceBlock(m_board, block, new_x, new_y)) {
+				x = new_x;
+				y = new_y;
+			}
 		}
 	}
 }
+
+bool canPlaceBlock(char*** m_board, char*** block, int x, int y) {
+	// 보드 크기 10x10 고정, 블록 크기 5x5 고정 가정
+	int boardSize = 10;
+	int blockSize = 5;
+
+	for (int i = 0; i < blockSize; i++) {
+		for (int j = 0; j < blockSize; j++) {
+			if (block[i][j] == "■") {
+				int boardX = x + j - 2;
+				int boardY = y + i - 2;
+
+				// 보드 범위 벗어나는지 체크
+				if (boardX < 0 || boardX >= boardSize || boardY < 0 || boardY >= boardSize)
+					return false;
+
+				// 보드 칸이 이미 블록으로 채워져 있으면 불가
+				if (m_board[boardX][boardY] == "■")
+					return false;
+			}
+		}
+	}
+	return true;
+}
+
 
 struct Ranking {
 	string name;
