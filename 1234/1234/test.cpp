@@ -9,6 +9,12 @@
 #include<string>
 #include <fstream>
 
+void clear_screen() {
+	COORD cursorPosition;
+	cursorPosition.X = 0;
+	cursorPosition.Y = 0;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
+}
 
 
 
@@ -119,7 +125,7 @@ int key_control() {
 				return k_3;
 			case 8: // Backspace
 				return k_back;
-			case 92: 
+			case 92:
 				return test_key;
 			default:
 				break; // 다른 키는 무시
@@ -127,6 +133,52 @@ int key_control() {
 		}
 	}
 }
+
+
+
+void allocate_board(char**** board) {
+	*board = new char** [board_row];
+	for (int i = 0; i < board_row; i++) {
+		(*board)[i] = new char* [board_col];
+		for (int j = 0; j < board_col; j++) {
+			(*board)[i][j] = new char[2];
+			strcpy_s((*board)[i][j], 2, " ");
+		}
+	}
+}
+
+void allocate_block(char**** block) {
+	*block = new char** [block_row];
+	for (int i = 0; i < block_row; i++) {
+		(*block)[i] = new char* [block_col];
+		for (int j = 0; j < block_col; j++) {
+			(*block)[i][j] = new char[2];
+			strcpy_s((*block)[i][j], 2, " ");
+		}
+	}
+}
+
+void deallocate_board(char*** board) {
+	for (int i = 0; i < board_row; i++) {
+		for (int j = 0; j < board_col; j++) {
+			delete[] board[i][j];
+		}
+		delete[] board[i];
+	}
+	delete[] board;
+}
+
+void deallocate_block(char*** block) {
+	for (int i = 0; i < block_row; i++) {
+		for (int j = 0; j < block_col; j++) {
+			delete[] block[i][j];
+		}
+		delete[] block[i];
+	}
+	delete[] block;
+}
+
+
 
 
 void draw_board(char*** board);
@@ -146,53 +198,47 @@ void move_and_place_block(char*** board, char*** c_board, char*** block);
 bool can_move(char*** m_board, char*** block, int x, int y);
 bool can_place_block(char*** board, char*** block, int x, int y);
 void put_block_with_overlap_check(char*** copy_board, char*** m_board, char*** block, int x, int y);
+int remove_lines(char*** board);
+
 int main() {
 	int key = -1;
 	bool playing = true;
-	bool block_used[3] = { true, true, true };
-
 	int high_score = load_high_score(); // 하이스코어 로드
 	int total_point = 0;
 
-	char*** m_board = new char** [board_row]; // 메인 보드
-	for (int i = 0; i < board_row; i++)
-		m_board[i] = new char* [board_col];
+	char*** m_board;
+	char*** c_board;
+	char*** f_block;
+	char*** s_block;
+	char*** t_block;
 
-	char*** c_board = new char** [board_row]; // 카피 보드
-	for (int i = 0; i < board_row; i++)
-		c_board[i] = new char* [board_col];
+	// 동적 메모리 할당
+	allocate_board(&m_board);   // 메인 보드
+	allocate_board(&c_board);   // 복사용 보드
+	allocate_block(&f_block);   // 1번 블럭
+	allocate_block(&s_block);   // 2번 블럭
+	allocate_block(&t_block);   // 3번 블럭
 
-	char*** f_block = new char** [block_row]; // 1번 블럭
-	for (int i = 0; i < block_row; i++)
-		f_block[i] = new char* [block_col];
-	char*** s_block = new char** [block_row]; // 2번 블럭
-	for (int i = 0; i < block_row; i++)
-		s_block[i] = new char* [block_col];
-
-	char*** t_block = new char** [block_row]; // 3번 블럭
-	for (int i = 0; i < block_row; i++)
-		t_block[i] = new char* [block_col];
-
-	main_board(m_board);
-	main_block(f_block);
-	main_block(s_block);
-	main_block(t_block);
-	cursor_view(false);
+	cursor_view(false); // 커서 숨기기
 
 	while (1) {
 		system("cls");
 		//draw_title();
 		//int menu_num = main_menu();
-		int menu_num = 0; //스킵용
+		int menu_num = 0; // 스킵용
 		if (menu_num == 0) {
 			//draw_title();
 			//int game_num = game_menu();
-			int game_num = 0; //스킵용
+			int game_num = 0; // 스킵용
 			if (game_num == 0) {
 				total_point = 0; // 스코어 초기화
+				bool block_used[3] = { true, true, true };
+
 				while (1) {
+					total_point += remove_lines(m_board); // 점수 누적
 					draw_board(m_board);
 					total_point = show_point(total_point, high_score);
+
 					if (block_used[0] && block_used[1] && block_used[2]) {
 						create_block(f_block);
 						create_block(s_block);
@@ -204,20 +250,30 @@ int main() {
 
 					show_block(f_block, s_block, t_block, block_used);
 					key = key_control();
+
 					if (key == k_1) {
-						move_and_place_block(m_board, c_board, f_block);
-						block_used[0] = true;
-						main_block(f_block);
+						if (!block_used[0]) {
+							move_and_place_block(m_board, c_board, f_block);
+							block_used[0] = true;
+							main_block(f_block);	
+						}
+						continue;
 					}
 					else if (key == k_2) {
-						move_and_place_block(m_board, c_board, s_block);
-						block_used[1] = true;
-						main_block(s_block);
+						if (!block_used[1]) {
+							move_and_place_block(m_board, c_board, s_block);
+							block_used[1] = true;
+							main_block(s_block);
+						}
+						continue;
 					}
 					else if (key == k_3) {
-						move_and_place_block(m_board, c_board, t_block);
-						block_used[2] = true;
-						main_block(t_block);
+						if (!block_used[2]) {
+							move_and_place_block(m_board, c_board, t_block);
+							block_used[2] = true;
+							main_block(t_block);
+						}
+						continue;
 					}
 					else if (key == k_back) {
 						break;
@@ -236,21 +292,29 @@ int main() {
 
 		else if (menu_num == 2) {
 			cout << "랭킹 : ";
-
 			while (1) {
 				int info_num = showRanking();
 				if (info_num == 9)
 					break;
 			}
-
 		}
 
 		else if (menu_num == 3) {
-			save_high_score(high_score); // 프로그램 종료 시 하이스코어 저장
+			save_high_score(high_score); // 하이스코어 저장
 			break;
 		}
 	}
+
+	// 동적 메모리 해제
+	deallocate_board(m_board);
+	deallocate_board(c_board);
+	deallocate_block(f_block);
+	deallocate_block(s_block);
+	deallocate_block(t_block);
+
+	return 0;
 }
+
 
 
 void draw_title() {
@@ -572,13 +636,11 @@ void move_and_place_block(char*** m_board, char*** c_board, char*** block) {
 	int x = 5;
 	int y = 5;
 	int key = 0;
-
 	while (1) {
 		system("cls"); // 콘솔 클리어
 		put_block_with_overlap_check(c_board, m_board, block, x, y); // 겹침 체크하며 c_board에 그리기
 		draw_board(c_board); // 미리보기용 보드 출력
 		key = key_control(); // 방향키 또는 엔터 입력 받기
-
 		int new_x = x;
 		int new_y = y;
 
@@ -590,10 +652,13 @@ void move_and_place_block(char*** m_board, char*** c_board, char*** block) {
 
 		case k_enter:
 			if (can_place_block(m_board, block, x, y)) {
-				set_block(m_board);
 				put_block(m_board, block, x, y); // 블록 배치
+				set_block(m_board);
+				return;
 			}
-			return; // 함수 종료
+			else {
+				continue;
+			}
 
 		case k_back:
 			return; // 취소
@@ -606,30 +671,72 @@ void move_and_place_block(char*** m_board, char*** c_board, char*** block) {
 		}
 	}
 }
+int remove_lines(char*** board) {
+	int removed = 0;
+	int sum = 0;
+	// 1. 가득 찬 행 삭제
+	for (int row = 0; row < board_row; ++row) {
+		bool full = true;
+		for (int col = 0; col < board_col; ++col) {
+			if (strcmp(board[row][col], " ") == 0) {
+				full = false;
+				break;
+			}
+		}
+		if (full) {
+			++removed;
+			for (int col = 0; col < board_col; ++col) {
+				board[row][col] = (char*)" ";
+			}
+		}
+	}
+
+	// 2. 가득 찬 열 삭제
+	for (int col = 0; col < board_col; ++col) {
+		bool full = true;
+		for (int row = 0; row < board_row; ++row) {
+			if (strcmp(board[row][col], " ") == 0) {
+				full = false;
+				break;
+			}
+		}
+		if (full) {
+			++removed;
+			for (int row = 0; row < board_row; ++row) {
+				board[row][col] = (char*)" ";
+			}
+		}
+	}
+	if (removed > 0) {
+		sum += removed * 10;            // 기본 점수
+		sum += (removed - 1) * 5;       // 보너스 점수 (2줄 이상일 때)
+	}
+	return sum;
+}
+
+
 
 void put_block_with_overlap_check(char*** c_board, char*** m_board, char*** block, int x, int y) {
 	int boardSize = 10;
 	int blockSize = 5;
-
 	// 먼저 메인 보드를 카피 보드로 복사
 	for (int i = 0; i < boardSize; i++) {
 		for (int j = 0; j < boardSize; j++) {
 			c_board[i][j] = m_board[i][j];
 		}
 	}
-
 	for (int i = 0; i < 5; i++) {
 		for (int j = 0; j < 5; j++) {
 			if (block[i][j] == "■") {
-				if(c_board[ x + j - 2][y + i -2] == "□")
+				if (c_board[x + j - 2][y + i - 2] == "■")
 					c_board[x + j - 2][y + i - 2] = (char*)"▣";
 				else
 					c_board[x + j - 2][y + i - 2] = (char*)"□";
 			}
 		}
 	}
-
 }
+
 bool can_move(char*** m_board, char*** block, int x, int y) {
 	// 보드 크기 10x10 고정, 블록 크기 5x5 고정 가정
 	int boardSize = 10;
@@ -664,7 +771,7 @@ bool can_place_block(char*** m_board, char*** block, int x, int y) {
 					return false;
 
 				// 이미 블록이 있는 경우 안 됨
-				if (strcmp(m_board[boardY][boardX], "■") == 0)
+				if (strcmp(m_board[boardX][boardY], "■") == 0)
 					return false;
 			}
 		}

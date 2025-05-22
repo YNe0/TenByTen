@@ -527,8 +527,8 @@ int draw_info() {
 
 
 struct Ranking {
-	string name;
-	int score;
+	string name="";
+	int score=0;
 };
 
 
