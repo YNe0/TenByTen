@@ -1,0 +1,75 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\TenByTen\\1234\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A0F043CF-C561-47CF-AE32-DF8E9A40922C}|1234\\1234.vcxproj|D:\\TenByTen\\1234\\1234\\test.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A0F043CF-C561-47CF-AE32-DF8E9A40922C}|1234\\1234.vcxproj|solutionrelative:1234\\test.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0F043CF-C561-47CF-AE32-DF8E9A40922C}|1234\\1234.vcxproj|D:\\TenByTen\\1234\\1234\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A0F043CF-C561-47CF-AE32-DF8E9A40922C}|1234\\1234.vcxproj|solutionrelative:1234\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0F043CF-C561-47CF-AE32-DF8E9A40922C}|1234\\1234.vcxproj|D:\\TenByTen\\1234\\1234\\1234.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A0F043CF-C561-47CF-AE32-DF8E9A40922C}|1234\\1234.vcxproj|solutionrelative:1234\\1234.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "1234.cpp",
+              "DocumentMoniker": "D:\\TenByTen\\1234\\1234\\1234.cpp",
+              "RelativeDocumentMoniker": "1234\\1234.cpp",
+              "ToolTip": "D:\\TenByTen\\1234\\1234\\1234.cpp",
+              "RelativeToolTip": "1234\\1234.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-05-22T04:42:08.956Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "main.cpp",
+              "DocumentMoniker": "D:\\TenByTen\\1234\\1234\\main.cpp",
+              "RelativeDocumentMoniker": "1234\\main.cpp",
+              "ToolTip": "D:\\TenByTen\\1234\\1234\\main.cpp",
+              "RelativeToolTip": "1234\\main.cpp",
+              "ViewState": "AgIAAOoAAAAAAAAAAAAAAPkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-05-21T11:24:16.966Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "test.cpp",
+              "DocumentMoniker": "D:\\TenByTen\\1234\\1234\\test.cpp",
+              "RelativeDocumentMoniker": "1234\\test.cpp",
+              "ToolTip": "D:\\TenByTen\\1234\\1234\\test.cpp",
+              "RelativeToolTip": "1234\\test.cpp",
+              "ViewState": "AgIAAJgBAAAAAAAAAAAAAEYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-05-12T07:23:45.88Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
