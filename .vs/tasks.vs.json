@@ -1,0 +1,15 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "task-yms",
+      "appliesTo": "1234/1234/yms.cpp",
+      "type": "launch"
+    },
+    {
+      "taskLabel": "task-yms",
+      "appliesTo": "1234/1234/yms.cpp",
+      "type": "launch"
+    }
+  ]
+}

@@ -1,16 +1,12 @@
-#include<iostream>
+ï»¿#include<iostream>
 #include<Windows.h>
 #include<conio.h>
 #include<vector>
 #include<math.h>
-#include<array>
-#include<cstdlib>
+#include<array> 
+#include<cstdlib> 
 #include<ctime>
 #include<string>
-#include <fstream>
-
-
-
 
 using namespace std;
 constexpr int board_row = 10;
@@ -27,8 +23,6 @@ constexpr int block_col = 5;
 #define k_2 7
 #define k_3 8
 #define k_back 9
-#define test_key 10
-
 
 /*
 void textcolor(int foreground, int background)
@@ -38,54 +32,6 @@ void textcolor(int foreground, int background)
 }
 */
 
-
-void gotoxy(int x, int y) {
-	COORD pos = { (SHORT)x, (SHORT)y };
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
-}
-
-int show_point(int point, int& high_score) {
-	int x = 70;
-	int y = 0;
-	gotoxy(x, y);
-	cout << "Point : ";
-	gotoxy(x + 8, y);
-	cout << point;
-
-	// ÇÏÀÌ½ºÄÚ¾î ¾÷µ¥ÀÌÆ®
-	if (point > high_score) {
-		high_score = point;
-		gotoxy(x, y + 1);
-		cout << "New High Score!";
-	}
-
-	gotoxy(x, y + 2);
-	cout << "High Score : " << high_score;
-
-	point++;
-	return point;
-}
-
-void save_high_score(int high_score) {
-	ofstream file("highscore.txt");
-	if (file.is_open()) {
-		file << high_score;
-		file.close();
-	}
-}
-int load_high_score() {
-	ifstream file("highscore.txt");
-	int high_score = 0;
-	if (file.is_open()) {
-		file >> high_score;
-		file.close();
-	}
-	return high_score;
-}
-
-
-
-
 void cursor_view(bool playing)
 {
 	CONSOLE_CURSOR_INFO cursorInfo = { 0, };
@@ -94,24 +40,27 @@ void cursor_view(bool playing)
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
 }
 
-
+void gotoxy(int x, int y) {
+	COORD pos = { x, y };
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+}
 
 int key_control() {
-	char key;
+	char key = ' ';
 	while (1) {
-		if (_kbhit) {
+		if (_kbhit()) {
 			key = _getch();
 		}
-		if (key == 72) { // À§
+		if (key == 72) { // ìœ„
 			return k_up;
 		}
-		if (key == 80) { // ¾Æ·¡
+		if (key == 80) { // ì•„ë˜
 			return k_down;
 		}
-		if (key == 75) { // ¿À¸¥ÂÊ
+		if (key == 75) { // ì˜¤ë¥¸ìª½
 			return k_right;
 		}
-		if (key == 77) { // ¿ŞÂÊ
+		if (key == 77) { // ì™¼ìª½
 			return k_left;
 		}
 		if (key == 13) { // enter
@@ -123,15 +72,11 @@ int key_control() {
 		if (key == 50) { // 2
 			return k_2;
 		}
-		if (key == 57) { // 3
+		if (key == 51) { // 3
 			return k_3;
 		}
 		if (key == 8) { // backspace
 			return k_back;
-
-		}
-		if (key == 92) {
-			return test_key;
 		}
 	}
 }
@@ -139,43 +84,42 @@ int key_control() {
 void draw_board(char*** board);
 void main_board(char*** board);
 int draw_info();
-int showRanking();
 void draw_title();
 int main_menu();
 int game_menu();
 int move_menu(int x, int y, int le);
+int show_point(int point);
 void main_block(char*** block);
 void show_block(char*** f_block, char*** s_block, char*** t_block);
 void create_block(char*** block);
 void draw_block(int x, int y, char*** block);
-void input_ranking(string name, int score);
+void put_block(char*** board, char*** block, int x, int y);
+void clean_board(char*** board);
+void set_block(char*** board);
+bool move_block(int& x, int& y, char*** board, char*** block);
+bool can_put_block(char*** block, int x, int y);
 
 int main() {
 	int key = -1;
 	bool playing = true;
 
-	int high_score = load_high_score(); // ÇÏÀÌ½ºÄÚ¾î ·Îµå
-	int total_point = 0;
-
-	char*** m_board = new char** [board_row]; // ¸ŞÀÎ º¸µå
+	char*** m_board = new char** [board_row]; // ë©”ì¸ ë³´ë“œ
 	for (int i = 0; i < board_row; i++)
 		m_board[i] = new char* [board_col];
 
-	char*** f_block = new char** [block_row]; // 1¹ø ºí·°
+	char*** f_block = new char** [block_row]; // 1ë²ˆ ë¸”ëŸ­
 	for (int i = 0; i < block_row; i++)
 		f_block[i] = new char* [block_col];
-	char*** s_block = new char** [block_row]; // 2¹ø ºí·°
+
+	char*** s_block = new char** [block_row]; // 2ë²ˆ ë¸”ëŸ­
 	for (int i = 0; i < block_row; i++)
 		s_block[i] = new char* [block_col];
 
-	char*** t_block = new char** [block_row]; // 3¹ø ºí·°
+	char*** t_block = new char** [block_row]; // 3ë²ˆ ë¸”ëŸ­
 	for (int i = 0; i < block_row; i++)
 		t_block[i] = new char* [block_col];
 
 	main_board(m_board);
-	main_block(f_block);
-	main_block(s_block);
-	main_block(t_block);
 	cursor_view(false);
 
 	while (1) {
@@ -187,33 +131,51 @@ int main() {
 			draw_title();
 			int game_num = game_menu();
 			if (game_num == 0) {
-				total_point = 0; // ½ºÄÚ¾î ÃÊ±âÈ­
+				int total_point = 0;
+				int x = 5;
+				int y = 5;
 				while (1) {
 					draw_board(m_board);
-					total_point = show_point(total_point, high_score); // ½ºÄÚ¾î ¾÷µ¥ÀÌÆ®
+					main_block(f_block);
+					main_block(s_block);
+					main_block(t_block);
+					total_point = show_point(total_point);
 					create_block(f_block);
 					create_block(s_block);
 					create_block(t_block);
 					show_block(f_block, s_block, t_block);
 					key = key_control();
-					if (key == 9) {
-						save_high_score(high_score); // °ÔÀÓ Á¾·á ½Ã ÇÏÀÌ½ºÄÚ¾î ÀúÀå
-						break;
+					if (key == k_1) {
+						put_block(m_board, f_block, 5, 5);
+						bool playing_block = true;
+						while (playing_block) {
+							clean_board(m_board);
+							put_block(m_board, f_block, x, y);
+							draw_board(m_board);
+							playing_block = move_block(x, y, m_board, f_block);
+						}
 					}
-					else if (key == test_key) // °ÔÀÓ¿À¹ö Ãâ·Â Å×½ºÆ®
-					{
-						system("cls");
-						int x = 50;
-						int y = 8;
-						gotoxy(x, y);
-						cout << "°ÔÀÓ¿À¹ö ! " << endl;
-						cout << "(´Ù½ÃÇÏ°í½ÍÀ¸¸é backSpace¸¦ ´©¸£½Ã¿À) " << endl;
-						string name;
-						cout << "´Ğ³×ÀÓÀ» ÀÔ·ÂÇÏ¼¼¿ä: ";
-						cin >> name;
-						input_ranking(name, total_point);
-						int key = key_control();
-
+					else if (key == k_2) {
+						put_block(m_board, s_block, 5, 5);
+						bool playing_block = true;
+						while (playing_block) {
+							clean_board(m_board);
+							put_block(m_board, s_block, x, y);
+							draw_board(m_board);
+							playing_block = move_block(x, y, m_board, s_block);
+						}
+					}
+					else if (key == k_3) {
+						put_block(m_board, t_block, 5, 5);
+						bool playing_block = true;
+						while (playing_block) {
+							clean_board(m_board);
+							put_block(m_board, t_block, x, y);
+							draw_board(m_board);
+							playing_block = move_block(x, y, m_board, t_block);
+						}
+					}
+					else if (key == k_back) {
 						break;
 					}
 				}
@@ -229,23 +191,10 @@ int main() {
 		}
 
 		else if (menu_num == 2) {
-			cout << "·©Å· : ";
-
-			while (1) {
-				int info_num = showRanking();
-				if (info_num == 9)
-					break;
-			}
-
-		}
-
-		else if (menu_num == 3) {
-			save_high_score(high_score); // ÇÁ·Î±×·¥ Á¾·á ½Ã ÇÏÀÌ½ºÄÚ¾î ÀúÀå
 			break;
 		}
 	}
 }
-
 
 void draw_title() {
 	system("cls");
@@ -253,32 +202,29 @@ void draw_title() {
 	cout << "                                                                                             \n";
 	cout << "                                                                                             \n";
 	cout << "                                                                                             \n";
-	cout << "                                 ¡á¡á¡á¡á¡á¡á¡á ¡á¡á¡á¡á¡á ¡á     ¡á   ¡á           ¡á¡á¡á¡á¡á¡á¡á ¡á¡á¡á¡á¡á ¡á     ¡á   \n";
-	cout << "                                    ¡á    ¡á     ¡á¡á    ¡á   ¡á              ¡á    ¡á     ¡á¡á    ¡á   \n";
-	cout << "                                    ¡á    ¡á     ¡á ¡á   ¡á   ¡á              ¡á    ¡á     ¡á ¡á   ¡á   \n";
-	cout << "                                    ¡á    ¡á¡á¡á¡á¡á ¡á  ¡á  ¡á   ¡á¡á¡á¡á  ¡á   ¡á    ¡á    ¡á¡á¡á¡á¡á ¡á  ¡á  ¡á   \n";
-	cout << "                                    ¡á    ¡á     ¡á   ¡á ¡á   ¡á   ¡á ¡á   ¡á    ¡á    ¡á     ¡á   ¡á ¡á   \n";
-	cout << "                                    ¡á    ¡á     ¡á    ¡á¡á   ¡á   ¡á ¡á   ¡á    ¡á    ¡á     ¡á    ¡á¡á   \n";
-	cout << "                                    ¡á    ¡á¡á¡á¡á¡á ¡á     ¡á   ¡á¡á¡á¡á   ¡á¡á¡á¡á    ¡á    ¡á¡á¡á¡á¡á ¡á     ¡á   \n";
-	cout << "                                                                   ¡á                         \n";
-	cout << "                                                                   ¡á                         \n";
-	cout << "                                                                 ¡á¡á                          \n";
+	cout << "                                 â– â– â– â– â– â– â–  â– â– â– â– â–  â–      â–    â–            â– â– â– â– â– â– â–  â– â– â– â– â–  â–      â–    \n";
+	cout << "                                    â–     â–      â– â–     â–    â–               â–     â–      â– â–     â–    \n";
+	cout << "                                    â–     â–      â–  â–    â–    â–               â–     â–      â–  â–    â–    \n";
+	cout << "                                    â–     â– â– â– â– â–  â–   â–   â–    â– â– â– â–   â–    â–     â–     â– â– â– â– â–  â–   â–   â–    \n";
+	cout << "                                    â–     â–      â–    â–  â–    â–    â–  â–    â–     â–     â–      â–    â–  â–    \n";
+	cout << "                                    â–     â–      â–     â– â–    â–    â–  â–    â–     â–     â–      â–     â– â–    \n";
+	cout << "                                    â–     â– â– â– â– â–  â–      â–    â– â– â– â–    â– â– â– â–     â–     â– â– â– â– â–  â–      â–    \n";
+	cout << "                                                                   â–                          \n";
+	cout << "                                                                   â–                          \n";
+	cout << "                                                                 â– â–                           \n";
 	cout << "                                                                                             \n";
 }
 
 int main_menu() {
 	int x = 58;
 	int y = 16;
-	int le = 4; // ¸Ş´º °¹¼ö Áõ°¡ (4°³)
+	int le = 3; // ë©”ë‰´ ê°¯ìˆ˜
 	gotoxy(x - 2, y);
-	cout << "> °ÔÀÓ½ÃÀÛ";
+	cout << "> ê²Œì„ì‹œì‘";
 	gotoxy(x, y + 1);
-	cout << "°ÔÀÓÁ¤º¸"; // ±âÁ¸ ¸Ş´º
+	cout << "ê²Œì„ì •ë³´";
 	gotoxy(x, y + 2);
-	cout << "Á¡¼öº¸±â"; // »õ·Î¿î ¸Ş´º Ãß°¡   cout << "°ÔÀÓÁ¤º¸";
-	gotoxy(x, y + 3);
-	cout << "  Á¾·á  ";
-
+	cout << "  ì¢…ë£Œ  ";
 	int i = move_menu(x, y, le);
 	return i;
 }
@@ -288,13 +234,13 @@ int game_menu() {
 	int y = 16;
 	int le = 4;
 	gotoxy(x - 2, y);
-	cout << "> Å¬·¡½Ä ¸ğµå";
+	cout << "> í´ë ˆì‹ ëª¨ë“œ";
 	gotoxy(x, y + 1);
-	cout << "ÇÏ µå ¸ğ µå ";
+	cout << "í•˜ ë“œ ëª¨ ë“œ ";
 	gotoxy(x, y + 2);
-	cout << "½ºÇÇµå ¸ğµå";
+	cout << "ìŠ¤í”¼ë“œ ëª¨ë“œ";
 	gotoxy(x, y + 3);
-	cout << "   µÚ·Î   ";
+	cout << "   ë’¤ë¡œ   ";
 	int i = move_menu(x, y, le);
 	return i;
 }
@@ -305,7 +251,7 @@ int move_menu(int x, int y, int le) {
 		int key = key_control();
 		switch (key) {
 		case k_up: {
-			if (y1 > y) { // ¾Æ·¡ ÀÌµ¿
+			if (y1 > y) { // ì•„ë˜ ì´ë™
 				gotoxy(x - 2, y1);
 				printf(" ");
 				gotoxy(x - 2, --y1);
@@ -314,7 +260,7 @@ int move_menu(int x, int y, int le) {
 			break;
 		}
 		case k_down: {
-			if (y1 < y + le - 1) { // À§·Î ÀÌµ¿
+			if (y1 < y + le - 1) { // ìœ„ë¡œ ì´ë™
 				gotoxy(x - 2, y1);
 				printf(" ");
 				gotoxy(x - 2, ++y1);
@@ -322,7 +268,7 @@ int move_menu(int x, int y, int le) {
 			}
 			break;
 		}
-		case k_enter: { // ÀÔ·Â
+		case k_enter: { // ì…ë ¥
 			return y1 - y;
 		}
 		}
@@ -388,7 +334,7 @@ void show_block(char*** f_block, char*** s_block, char*** t_block) {
 	draw_block(x, y + 18, t_block);
 }
 
-void draw_block(int x, int y, char*** block) { // º¸µå¿¡ ºí·° ±×¸®±â
+void draw_block(int x, int y, char*** block) { // ë³´ë“œì— ë¸”ëŸ­ ê·¸ë¦¬ê¸°
 	for (int i = 0; i < block_row; i++) {
 		for (int j = 0; j < block_col; j++) {
 			gotoxy(x + 5 + i, y - 2 + j);
@@ -397,121 +343,177 @@ void draw_block(int x, int y, char*** block) { // º¸µå¿¡ ºí·° ±×¸®±â
 	}
 }
 
-void create_block(char*** block) { //ºí·° »ı¼º
+void create_block(char*** block) { //ë¸”ëŸ­ ìƒì„±
 	int block_num = rand() % 19 + 1;
 	switch (block_num) {
 	case 1:
-		block[2][2] = (char*)"¡á";
+		block[2][2] = (char*)"â– ";
 		break;
 	case 2:
-		block[1][2] = (char*)"¡á";
-		block[2][2] = (char*)"¡á";
+		block[1][2] = (char*)"â– ";
+		block[2][2] = (char*)"â– ";
 		break;
 	case 3:
-		block[1][2] = (char*)"¡á";
-		block[2][2] = (char*)"¡á";
-		block[3][2] = (char*)"¡á";
+		block[1][2] = (char*)"â– ";
+		block[2][2] = (char*)"â– ";
+		block[3][2] = (char*)"â– ";
 		break;
 	case 4:
-		block[0][2] = (char*)"¡á";
-		block[1][2] = (char*)"¡á";
-		block[2][2] = (char*)"¡á";
-		block[3][2] = (char*)"¡á";
+		block[0][2] = (char*)"â– ";
+		block[1][2] = (char*)"â– ";
+		block[2][2] = (char*)"â– ";
+		block[3][2] = (char*)"â– ";
 		break;
 	case 5:
-		block[0][2] = (char*)"¡á";
-		block[1][2] = (char*)"¡á";
-		block[2][2] = (char*)"¡á";
-		block[3][2] = (char*)"¡á";
-		block[4][2] = (char*)"¡á";
+		block[0][2] = (char*)"â– ";
+		block[1][2] = (char*)"â– ";
+		block[2][2] = (char*)"â– ";
+		block[3][2] = (char*)"â– ";
+		block[4][2] = (char*)"â– ";
 		break;
 	case 6:
-		block[2][1] = (char*)"¡á";
-		block[2][2] = (char*)"¡á";
+		block[2][1] = (char*)"â– ";
+		block[2][2] = (char*)"â– ";
 		break;
 	case 7:
-		block[2][1] = (char*)"¡á";
-		block[2][2] = (char*)"¡á";
-		block[2][3] = (char*)"¡á";
+		block[2][1] = (char*)"â– ";
+		block[2][2] = (char*)"â– ";
+		block[2][3] = (char*)"â– ";
 		break;
 	case 8:
-		block[2][0] = (char*)"¡á";
-		block[2][1] = (char*)"¡á";
-		block[2][2] = (char*)"¡á";
-		block[2][3] = (char*)"¡á";
+		block[2][0] = (char*)"â– ";
+		block[2][1] = (char*)"â– ";
+		block[2][2] = (char*)"â– ";
+		block[2][3] = (char*)"â– ";
 		break;
 	case 9:
-		block[2][0] = (char*)"¡á";
-		block[2][1] = (char*)"¡á";
-		block[2][2] = (char*)"¡á";
-		block[2][3] = (char*)"¡á";
-		block[2][4] = (char*)"¡á";
+		block[2][0] = (char*)"â– ";
+		block[2][1] = (char*)"â– ";
+		block[2][2] = (char*)"â– ";
+		block[2][3] = (char*)"â– ";
+		block[2][4] = (char*)"â– ";
 		break;
 	case 10:
-		block[1][1] = (char*)"¡á";
-		block[1][2] = (char*)"¡á";
-		block[2][2] = (char*)"¡á";
+		block[1][1] = (char*)"â– ";
+		block[1][2] = (char*)"â– ";
+		block[2][2] = (char*)"â– ";
 		break;
 	case 11:
-		block[2][1] = (char*)"¡á";
-		block[2][2] = (char*)"¡á";
-		block[3][1] = (char*)"¡á";
+		block[2][1] = (char*)"â– ";
+		block[2][2] = (char*)"â– ";
+		block[3][1] = (char*)"â– ";
 		break;
 	case 12:
-		block[2][2] = (char*)"¡á";
-		block[3][2] = (char*)"¡á";
-		block[3][3] = (char*)"¡á";
+		block[2][2] = (char*)"â– ";
+		block[3][2] = (char*)"â– ";
+		block[3][3] = (char*)"â– ";
 		break;
 	case 13:
-		block[1][3] = (char*)"¡á";
-		block[2][2] = (char*)"¡á";
-		block[2][3] = (char*)"¡á";
+		block[1][3] = (char*)"â– ";
+		block[2][2] = (char*)"â– ";
+		block[2][3] = (char*)"â– ";
 		break;
 	case 14:
-		block[1][1] = (char*)"¡á";
-		block[1][2] = (char*)"¡á";
-		block[2][1] = (char*)"¡á";
-		block[2][2] = (char*)"¡á";
+		block[1][1] = (char*)"â– ";
+		block[1][2] = (char*)"â– ";
+		block[2][1] = (char*)"â– ";
+		block[2][2] = (char*)"â– ";
 		break;
 	case 15:
-		block[1][1] = (char*)"¡á";
-		block[1][2] = (char*)"¡á";
-		block[1][3] = (char*)"¡á";
-		block[2][3] = (char*)"¡á";
-		block[3][3] = (char*)"¡á";
+		block[1][1] = (char*)"â– ";
+		block[1][2] = (char*)"â– ";
+		block[1][3] = (char*)"â– ";
+		block[2][3] = (char*)"â– ";
+		block[3][3] = (char*)"â– ";
 		break;
 	case 16:
-		block[1][1] = (char*)"¡á";
-		block[1][2] = (char*)"¡á";
-		block[1][3] = (char*)"¡á";
-		block[2][1] = (char*)"¡á";
-		block[3][1] = (char*)"¡á";
+		block[1][1] = (char*)"â– ";
+		block[1][2] = (char*)"â– ";
+		block[1][3] = (char*)"â– ";
+		block[2][1] = (char*)"â– ";
+		block[3][1] = (char*)"â– ";
 		break;
 	case 17:
-		block[1][1] = (char*)"¡á";
-		block[2][1] = (char*)"¡á";
-		block[3][1] = (char*)"¡á";
-		block[3][2] = (char*)"¡á";
-		block[3][3] = (char*)"¡á";
+		block[1][1] = (char*)"â– ";
+		block[2][1] = (char*)"â– ";
+		block[3][1] = (char*)"â– ";
+		block[3][2] = (char*)"â– ";
+		block[3][3] = (char*)"â– ";
 		break;
 	case 18:
-		block[1][3] = (char*)"¡á";
-		block[2][3] = (char*)"¡á";
-		block[3][1] = (char*)"¡á";
-		block[3][2] = (char*)"¡á";
-		block[3][3] = (char*)"¡á";
+		block[1][3] = (char*)"â– ";
+		block[2][3] = (char*)"â– ";
+		block[3][1] = (char*)"â– ";
+		block[3][2] = (char*)"â– ";
+		block[3][3] = (char*)"â– ";
 		break;
 	case 19:
-		block[1][1] = (char*)"¡á";
-		block[1][2] = (char*)"¡á";
-		block[1][3] = (char*)"¡á";
-		block[2][1] = (char*)"¡á";
-		block[2][2] = (char*)"¡á";
-		block[2][3] = (char*)"¡á";
-		block[3][1] = (char*)"¡á";
-		block[3][2] = (char*)"¡á";
-		block[3][3] = (char*)"¡á";
+		block[1][1] = (char*)"â– ";
+		block[1][2] = (char*)"â– ";
+		block[1][3] = (char*)"â– ";
+		block[2][1] = (char*)"â– ";
+		block[2][2] = (char*)"â– ";
+		block[2][3] = (char*)"â– ";
+		block[3][1] = (char*)"â– ";
+		block[3][2] = (char*)"â– ";
+		block[3][3] = (char*)"â– ";
 		break;
+	}
+}
+
+int show_point(int point) {
+	int x = 70;
+	int y = 0;
+	gotoxy(x, y);
+	cout << "Point : ";
+	gotoxy(x + 8, y);
+	cout << point;
+	point++;
+	return point;
+}
+
+void clean_board(char*** board) {
+	for (int i = 0; i < board_row; i++) {
+		for (int j = 0; j < board_col; j++) {
+			if (board[i][j] == "â–¡") {
+				board[i][j] = (char*)" ";
+			}
+			else if (board[i][j] == "â–£") {
+				board[i][j] = (char*)"â– ";
+			}
+
+		}
+	}
+}
+
+void put_block(char*** board, char*** block, int x, int y) {
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			if (block[i][j] == "â– ") {
+				int block_x = x + j - 2;
+				int block_y = y + i - 2;
+				// ë°°ì—´ ì¸ë±ìŠ¤ ë²”ìœ„ ì²´í¬ (ë³´ë“œ ë°– ì ‘ê·¼ ë°©ì§€)
+				if (block_x >= 0 && block_x < board_row && block_y >= 0 && block_y < board_col) {
+					// ì´ë¯¸ í™•ì •ëœ "â– "ê°€ ì•„ë‹ˆë©´ ì„ì‹œ "â–¡"ë¡œ ë§ˆí‚¹
+					if (board[block_x][block_y] != (char*)"â– ") {
+						board[block_x][block_y] = (char*)"â–¡";
+					}
+					else if (board[block_x][block_y] == (char*)"â– ") {
+						board[block_x][block_y] = (char*)"â–£";
+					}
+				}
+			}
+		}
+	}
+}
+
+void set_block(char*** board) {
+	for (int i = 0; i < board_row; i++) {
+		for (int j = 0; j < board_col; j++) {
+			if (board[i][j] == "â–¡") {
+				board[i][j] = (char*)"â– ";
+			}
+		}
 	}
 }
 
@@ -520,58 +522,46 @@ int draw_info() {
 	int x = 50;
 	int y = 8;
 	gotoxy(x, y);
-	cout << "¡æ ¡ç ¡è ¡é ? 1 2 3";
+	cout << "â†’ â† â†‘ â†“ â†² 1 2 3";
 	int key = key_control();
 	return key;
 }
 
+bool move_block(int& x, int& y, char*** board, char*** block) {
+	int prev_x = x, prev_y = y;
+	int move_k = key_control();
+	if (move_k == k_up) x--;
+	else if (move_k == k_down) x++;
+	else if (move_k == k_left) y++;
+	else if (move_k == k_right) y--;
 
-struct Ranking {
-	string name="";
-	int score=0;
-};
-
-
-int showRanking() {
-	system("cls");
-
-	vector<Ranking> rankings;
-	ifstream fin("ranking.txt");
-	Ranking r;
-	while (fin >> r.name >> r.score) {
-		rankings.push_back(r);
+	// ì´ë™ í›„ ë³´ë“œ ë²”ìœ„ ë°–ìœ¼ë¡œ ë‚˜ê°€ëŠ”ì§€ í™•ì¸
+	if (!can_put_block(block, x, y)) {
+		// ë²”ìœ„ ë°–ì´ë©´ ì›ë˜ëŒ€ë¡œ ëŒë¦¼
+		x = prev_x;
+		y = prev_y;
 	}
-	fin.close();
 
-	// Á¡¼ö ±âÁØ ³»¸²Â÷¼ø Á¤·Ä (¹öºí Á¤·Ä)
-	for (size_t i = 0; i < rankings.size(); i++) {
-		for (size_t j = 0; j < rankings.size() - 1; j++) {
-			if (rankings[j].score < rankings[j + 1].score) {
-				Ranking temp = rankings[j];
-				rankings[j] = rankings[j + 1];
-				rankings[j + 1] = temp;
+	if (move_k == k_enter) {
+		set_block(board);
+		draw_board(board);
+		return false;
+	}
+	return true;
+}
+
+bool can_put_block(char*** block, int x, int y) {
+	for (int i = 0; i < block_row; ++i) {
+		for (int j = 0; j < block_col; ++j) {
+			if (block[i][j] == (char*)"â– ") {
+				int bx = x + j - 2;
+				int by = y + i - 2;
+				// ë³´ë“œ ë°–ì´ë©´ false
+				if (bx < 0 || bx >= board_row || by < 0 || by >= board_col) {
+					return false;
+				}
 			}
 		}
 	}
-
-	cout << "=== ·©Å· ===" << endl;
-	for (size_t i = 0; i < rankings.size() && i < 10; i++) {
-		cout << i + 1 << "À§: " << rankings[i].name << " - " << rankings[i].score << "Á¡" << endl;
-	}
-
-	cout << "\nbackspace¸¦ ´­·¯ µÚ·Î °¡±â" << endl;
-	int key;
-	while (1) {
-		key = key_control();
-		if (key == 9)
-			return 9;
-	}
-}
-
-void input_ranking(string name, int score) {
-	ofstream fout("ranking.txt", ios::app); // Ãß°¡ ¸ğµå
-	if (fout.is_open()) {
-		fout << name << " " << score << endl;
-		fout.close();
-	}
+	return true;
 }
