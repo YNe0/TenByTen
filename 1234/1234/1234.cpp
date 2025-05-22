@@ -48,7 +48,7 @@ void gotoxy(int x, int y) {
 int key_control() {
 	char key = ' ';
 	while (1) {
-		if (_kbhit) {
+		if (_kbhit()) {
 			key = _getch();
 		}
 		if (key == 72) { // 위
@@ -96,6 +96,8 @@ void draw_block(int x, int y, char*** block);
 void put_block(char*** board, char*** block, int x, int y);
 void clean_board(char*** board);
 void set_block(char*** board);
+bool move_block(int& x, int& y, char*** board, char*** block);
+bool can_put_block(char*** block, int x, int y);
 
 int main() {
 	int key = -1;
@@ -145,47 +147,33 @@ int main() {
 					key = key_control();
 					if (key == k_1) {
 						put_block(m_board, f_block, x, y);
-						while (1) {
+						bool playing_block = true;
+						while (playing_block) {
 							clean_board(m_board);
 							put_block(m_board, f_block, x, y);
 							draw_board(m_board);
-							int move_k = key_control();
-							if (move_k == k_up) {
-								x--;
-								if (x < 0) {
-									x++;
-								}
-							}
-							else if (move_k == k_down) {
-								x++;
-								if (x > 9) {
-									x--;
-								}
-							}
-							else if (move_k == k_right) {
-								y--;
-								if (y < 0) {
-									y++;
-								}
-							}
-							else if (move_k == k_left) {
-								y++;
-								if (y > 9) {
-									y--;
-								}
-							}
-							else if (move_k == k_enter) {
-								set_block(m_board);
-								draw_board(m_board);
-								break;
-							}
+							playing_block = move_block(x, y, m_board, f_block);
 						}
 					}
 					else if (key == k_2) {
 						put_block(m_board, s_block, 5, 5);
+						bool playing_block = true;
+						while (playing_block) {
+							clean_board(m_board);
+							put_block(m_board, s_block, x, y);
+							draw_board(m_board);
+							playing_block = move_block(x, y, m_board, s_block);
+						}
 					}
 					else if (key == k_3) {
 						put_block(m_board, t_block, 5, 5);
+						bool playing_block = true;
+						while (playing_block) {
+							clean_board(m_board);
+							put_block(m_board, t_block, x, y);
+							draw_board(m_board);
+							playing_block = move_block(x, y, m_board, t_block);
+						}
 					}
 					else if (key == k_back) {
 						break;
@@ -498,7 +486,15 @@ void put_block(char*** board, char*** block, int x, int y) {
 	for (int i = 0; i < 5; i++) {
 		for (int j = 0; j < 5; j++) {
 			if (block[i][j] == "■") {
-				board[x + j - 2][y + i - 2] = (char*)"□";
+				int block_x = x + j - 2;
+				int block_y = y + i - 2;
+				// 배열 인덱스 범위 체크 (보드 밖 접근 방지)
+				if (block_x >= 0 && block_x < board_row && block_y >= 0 && block_y < board_col) {
+					// 이미 확정된 "■"가 아니면 임시 "□"로 마킹
+					if (board[block_x][block_y] != (char*)"■") {
+						board[block_x][block_y] = (char*)"□";
+					}
+				}
 			}
 		}
 	}
@@ -522,4 +518,43 @@ int draw_info() {
 	cout << "→ ← ↑ ↓ ↲ 1 2 3";
 	int key = key_control();
 	return key;
+}
+
+bool move_block(int& x, int& y, char*** board, char*** block) {
+	int prev_x = x, prev_y = y;
+	int move_k = key_control();
+	if (move_k == k_up) x--;
+	else if (move_k == k_down) x++;
+	else if (move_k == k_left) y++;
+	else if (move_k == k_right) y--;
+
+	// 이동 후 보드 범위 밖으로 나가는지 확인
+	if (!can_put_block(block, x, y)) {
+		// 범위 밖이면 원래대로 돌림
+		x = prev_x;
+		y = prev_y;
+	}
+
+	if (move_k == k_enter) {
+		set_block(board);
+		draw_board(board);
+		return false;
+	}
+	return true;
+}
+
+bool can_put_block(char*** block, int x, int y) {
+	for (int i = 0; i < block_row; ++i) {
+		for (int j = 0; j < block_col; ++j) {
+			if (block[i][j] == (char*)"■") {
+				int bx = x + j - 2;
+				int by = y + i - 2;
+				// 보드 밖이면 false
+				if (bx < 0 || bx >= board_row || by < 0 || by >= board_col) {
+					return false;
+				}
+			}
+		}
+	}
+	return true;
 }
