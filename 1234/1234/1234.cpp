@@ -30,7 +30,7 @@ void textcolor(int foreground, int background)
 	int color = foreground + background * 16;
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
-*/
+*/	
 
 void cursor_view(bool playing)
 {
@@ -146,7 +146,7 @@ int main() {
 					show_block(f_block, s_block, t_block);
 					key = key_control();
 					if (key == k_1) {
-						put_block(m_board, f_block, x, y);
+						put_block(m_board, f_block, 5, 5);
 						bool playing_block = true;
 						while (playing_block) {
 							clean_board(m_board);
@@ -478,6 +478,10 @@ void clean_board(char*** board) {
 			if (board[i][j] == "□") {
 				board[i][j] = (char*)" ";
 			}
+			else if (board[i][j] == "▣") {
+				board[i][j] = (char*)"■";
+			}
+
 		}
 	}
 }
@@ -493,6 +497,9 @@ void put_block(char*** board, char*** block, int x, int y) {
 					// 이미 확정된 "■"가 아니면 임시 "□"로 마킹
 					if (board[block_x][block_y] != (char*)"■") {
 						board[block_x][block_y] = (char*)"□";
+					}
+					else if (board[block_x][block_y] == (char*)"■") {
+						board[block_x][block_y] = (char*)"▣";
 					}
 				}
 			}
