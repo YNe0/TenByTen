@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "KeyDef.h"
+#include<stdio.h>
 
 using namespace std;
 
