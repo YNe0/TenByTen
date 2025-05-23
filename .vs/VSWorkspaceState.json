@@ -1,9 +1,16 @@
 {
   "ExpandedNodes": [
     "",
+<<<<<<< HEAD
     "\\1234",
     "\\1234\\1234"
   ],
   "SelectedNode": "\\1234\\1234\\test.cpp",
+=======
+    "\\TenByTen",
+    "\\TenByTen\\TenByTen"
+  ],
+  "SelectedNode": "\\TenByTen\\TenByTen\\main.cpp",
+>>>>>>> origin/TenByTen
   "PreviewInSolutionExplorer": false
 }
