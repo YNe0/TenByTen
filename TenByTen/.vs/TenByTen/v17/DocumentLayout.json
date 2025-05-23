@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\User\\Documents\\GitHub\\TenByTen\\TenByTen\\TenByTen\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|C:\\Users\\User\\Documents\\GitHub\\TenByTen\\TenByTen\\TenByTen\\TenByTen\\TenByTen.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\TenByTen.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "TenByTen.cpp",
+              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\TenByTen\\TenByTen\\TenByTen\\TenByTen\\TenByTen.cpp",
+              "RelativeDocumentMoniker": "TenByTen\\TenByTen.cpp",
+              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\TenByTen\\TenByTen\\TenByTen\\TenByTen\\TenByTen.cpp",
+              "RelativeToolTip": "TenByTen\\TenByTen.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-05-23T00:05:50.163Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
