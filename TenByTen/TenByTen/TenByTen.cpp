@@ -1,5 +1,4 @@
-﻿/*
-#include <iostream>
+﻿#include <iostream>
 #include <Windows.h>
 #include <conio.h>
 #include <vector>
@@ -500,7 +499,7 @@ bool can_place_block(char*** m_board, char*** block, int x, int y) {
     return true;
 }
 
-void move_and_place_block(char*** m_board, char*** c_board, char*** block) {
+bool move_and_place_block(char*** m_board, char*** c_board, char*** block) {
     int x = 5, y = 5;
     int key = 0;
     while (1) {
@@ -518,18 +517,18 @@ void move_and_place_block(char*** m_board, char*** c_board, char*** block) {
             if (can_place_block(m_board, block, x, y)) {
                 put_block(m_board, block, x, y);
                 set_block(m_board);
-                return;
+                return true;
             }
             continue;
         case k_back:
-            return;
+            return false;
         }
         if (can_move(m_board, block, new_x, new_y)) {
             x = new_x; y = new_y;
         }
     }
 }
-
+/*
 int remove_lines(char*** board) {
     int removed = 0;
     int sum = 0;
@@ -568,6 +567,65 @@ int remove_lines(char*** board) {
         sum += (removed - 1) * 5;
     }
     return sum;
+}
+*/
+
+int remove_lines(char*** board) {
+    int remove_line_x[10];  // 최대 10줄까지 제거 가능
+    int remove_line_y[10];
+    int count_x = 0;
+    int count_y = 0;
+    int point = 0;
+
+    // 가로줄 검사
+    for (int i = 0; i < 10; ++i) {
+        bool full_row = true;
+        for (int j = 0; j < 10; ++j) {
+            if (strcmp(board[i][j], " ") == 0) {
+                full_row = false;
+                break;
+            }
+        }
+        if (full_row) {
+            remove_line_x[count_x++] = i;
+        }
+    }
+
+    // 세로줄 검사
+    for (int i = 0; i < 10; ++i) {
+        bool full_col = true;
+        for (int j = 0; j < 10; ++j) {
+            if (strcmp(board[j][i], " ") == 0) {
+                full_col = false;
+                break;
+            }
+        }
+        if (full_col) {
+            remove_line_y[count_y++] = i;
+        }   
+    }
+
+    // 가로줄 제거
+    cout << count_x << "x";
+    for (int k = 0; k < count_x; ++k) {
+        int x = remove_line_x[k];
+        for (int j = 0; j < 10; ++j) {
+            strcpy_s(board[x][j], 4, " ");
+        }
+        point += 10;
+    }
+
+    // 세로줄 제거
+    cout << count_y << "y";
+    for (int k = 0; k < count_y; ++k) {
+        int y = remove_line_y[k];
+        for (int i = 0; i < 10; ++i) {
+            strcpy_s(board[i][y], 4, " ");
+        }
+        point += 10;
+    }
+
+    return point;
 }
 
 int draw_info() {
@@ -678,25 +736,22 @@ int main() {
 
                     if (key == k_1) {
                         if (!block_used[0]) {
-                            move_and_place_block(m_board, c_board, f_block);
-                            block_used[0] = true;
-                            main_block(f_block);
+                            block_used[0] = move_and_place_block(m_board, c_board, f_block);
+                            if(block_used[0]) main_block(f_block);
                         }
                         continue;
                     }
                     else if (key == k_2) {
                         if (!block_used[1]) {
-                            move_and_place_block(m_board, c_board, s_block);
-                            block_used[1] = true;
-                            main_block(s_block);
+                            block_used[1] = move_and_place_block(m_board, c_board, s_block);
+                            if (block_used[1]) main_block(s_block);
                         }
                         continue;
                     }
                     else if (key == k_3) {
                         if (!block_used[2]) {
-                            move_and_place_block(m_board, c_board, t_block);
-                            block_used[2] = true;
-                            main_block(t_block);
+                            block_used[2] = move_and_place_block(m_board, c_board, t_block);
+                            if (block_used[2]) main_block(t_block);
                         }
                         continue;
                     }
@@ -734,4 +789,3 @@ int main() {
 
     return 0;
 }
-*/
