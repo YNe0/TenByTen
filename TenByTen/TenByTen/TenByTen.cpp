@@ -595,7 +595,7 @@ int remove_lines(char*** board) {
     for (int i = 0; i < 10; ++i) {
         bool full_col = true;
         for (int j = 0; j < 10; ++j) {
-            if (strcmp(board[i][j], " ") == 0) {
+            if (strcmp(board[j][i], " ") == 0) {
                 full_col = false;
                 break;
             }
