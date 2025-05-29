@@ -241,7 +241,7 @@ void draw_block(int x, int y, char*** block) {
 
 void show_block(char*** f_block, char*** s_block, char*** t_block, bool* block_used) {
     int x = 70;
-    int y = 6;
+    int y = 6;  
     if (!block_used[0]) {
         gotoxy(x, y);
         cout << "1";
@@ -704,8 +704,9 @@ int main() {
                     }
 
                     if (all_blocks_unplaceable(m_board, f_block, s_block, t_block, block_used)) {
-                        gotoxy(0, 35);
-                        cout << "\n\n※ 모든 블록을 배치할 수 없습니다. 게임 오버!";
+                        system("cls");
+                        cout << "\n※ 모든 블록을 배치할 수 없습니다. 게임 오버!";
+                        cout << "\n점수 : " << total_point;
                         cout << "\n이름을 입력하세요(랭킹 저장): ";
                         string name; cin >> name;
                         input_ranking(name, total_point);
@@ -741,6 +742,8 @@ int main() {
                         continue;
                     }
                     else if (key == k_back) {
+                        system("cls");
+                        cout << "\n점수 : " << total_point;
                         cout << "\n이름을 입력하세요(랭킹 저장): ";
                         string name; cin >> name;
                         input_ranking(name, total_point);
