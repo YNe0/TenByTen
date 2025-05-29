@@ -531,6 +531,18 @@ bool move_and_place_block(char*** m_board, char*** c_board, char*** block, char*
     }
 }
 
+int count_block_cells(char*** block) {
+    int count = 0;
+    for (int i = 0; i < block_row; ++i) {
+        for (int j = 0; j < block_col; ++j) {
+            if (strcmp(block[i][j], "■") == 0) {
+                ++count;
+            }
+        }
+    }
+    return count;
+}
+
 int remove_lines(char*** board) {
     int remove_line_x[10];
     int remove_line_y[10];
@@ -600,12 +612,64 @@ bool all_blocks_unplaceable(char*** board, char*** f_block, char*** s_block, cha
 
 
 int draw_info() {
+
+
     system("cls");
     int x = 50, y = 8;
     gotoxy(x, y);
-    cout << "→ ← ↑ ↓ 1 2 3";
-    int key = key_control();
-    return key;
+
+    cout << "개요";
+    gotoxy(x - 30, y + 2);
+    cout << "공주대학교 소프트웨어학과 2학년 여민수, 나권엽, 김건희 학생이 C++로 개발한 TenByTen 게임 입니다";
+    gotoxy(x - 15, y + 4);
+    cout << "창의적인 설계와 효율적인 구현이 돋보이는 콘솔 기반 퍼즐 게임입니다.";
+    gotoxy(x - 15, y + 6);
+    cout << "직관적인 조작 방식과 전략적인 요소로 몰입감 있는 경험을 제공합니다.";
+
+    gotoxy(x, y + 20);
+    cout << "Page 1/3";
+    while (true) {
+        int key = key_control();
+        if (key == k_enter) break;
+    }
+
+    system("cls");
+    gotoxy(x, y);
+    cout << "조작 방법";
+    gotoxy(x - 5, y + 2);
+    cout << "커서 이동 : 방향키(↑, ↓, ←, →)";
+    gotoxy(x - 5, y + 3);
+    cout << "블록 선택 : 숫자 키 1, 2, 3";
+    gotoxy(x - 5, y + 4);
+    cout << "블록 배치 : Enter 키";
+    gotoxy(x - 5, y + 20);
+    cout << "Page 2/3";
+
+    while (true) {
+        int key = key_control();
+        if (key == k_enter) break;
+    }
+
+
+    system("cls");
+    gotoxy(x, y);
+    cout << "점수 방법";
+    gotoxy(x - 5, y + 2);
+    cout << "블록 배치 : 블록을 하나 배치할 때마다 1점이 추가됩니다.";
+    gotoxy(x - 5, y + 3);
+    cout << "줄 제거 : 가로 또는 세로로 한 줄을 완성하여 제거할 때마다 10점이 추가됩니다.";
+    gotoxy(x - 5, y + 4);
+    cout << "콤보 시스템 : ";
+    gotoxy(x - 5, y + 20);
+    cout << "Page 3/3 (BackSpace를 이용하여 나가기...)";
+
+    // Backspace 입력 대기
+    while (true) {
+        int key = key_control();
+        if (key == k_back) return k_back;
+
+    }
+
 }
 
 struct Ranking {
@@ -721,7 +785,10 @@ int main() {
                         if (!block_used[0]) {
                             block_used[0] = true;
                             block_used[0] = move_and_place_block(m_board, c_board, f_block, f_block, s_block, t_block, block_used, total_point, high_score);
-                            if (block_used[0]) main_block(f_block);
+                            if (block_used[0]) {
+                                total_point += count_block_cells(f_block);
+                                main_block(f_block);
+                            }
                         }
                         continue;
                     }
@@ -729,7 +796,10 @@ int main() {
                         if (!block_used[1]) {
                             block_used[1] = true;
                             block_used[1] = move_and_place_block(m_board, c_board, s_block, f_block, s_block, t_block, block_used, total_point, high_score);
-                            if (block_used[1]) main_block(s_block);
+                            if (block_used[1]) {
+                                total_point += count_block_cells(s_block);
+                                main_block(s_block);
+                            }
                         }
                         continue;
                     }
@@ -737,7 +807,10 @@ int main() {
                         if (!block_used[2]) {
                             block_used[2] = true;
                             block_used[2] = move_and_place_block(m_board, c_board, t_block, f_block, s_block, t_block, block_used, total_point, high_score);
-                            if (block_used[2]) main_block(t_block);
+                            if (block_used[2]) {
+                                total_point += count_block_cells(t_block);
+                                main_block(t_block);
+                            }
                         }
                         continue;
                     }

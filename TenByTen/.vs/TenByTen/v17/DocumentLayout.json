@@ -7,10 +7,6 @@
       "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\TenByTen.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|C:\\Users\\User\\Documents\\GitHub\\TenByTen\\TenByTen\\TenByTen\\TenByTen\\yms.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\yms.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|C:\\Users\\User\\Documents\\GitHub\\TenByTen\\TenByTen\\TenByTen\\TenByTen\\kgh.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\kgh.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
@@ -22,35 +18,29 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
-            },
+            }
+          ]
+        },
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "kgh.cpp",
               "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\TenByTen\\TenByTen\\TenByTen\\TenByTen\\kgh.cpp",
               "RelativeDocumentMoniker": "TenByTen\\kgh.cpp",
               "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\TenByTen\\TenByTen\\TenByTen\\TenByTen\\kgh.cpp",
               "RelativeToolTip": "TenByTen\\kgh.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAAD8CAAAAAAAAAAAWwEICAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-05-29T05:07:02.356Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "yms.cpp",
-              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\TenByTen\\TenByTen\\TenByTen\\TenByTen\\yms.cpp",
-              "RelativeDocumentMoniker": "TenByTen\\yms.cpp",
-              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\TenByTen\\TenByTen\\TenByTen\\TenByTen\\yms.cpp",
-              "RelativeToolTip": "TenByTen\\yms.cpp",
-              "ViewState": "AQIAAOMCAAAAAAAAAAAkwAsDAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-05-23T01:34:23.722Z",
+              "WhenOpened": "2025-05-29T06:28:22.337Z",
               "EditorCaption": ""
             },
             {
@@ -61,7 +51,7 @@
               "RelativeDocumentMoniker": "TenByTen\\TenByTen.cpp",
               "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\TenByTen\\TenByTen\\TenByTen\\TenByTen\\TenByTen.cpp",
               "RelativeToolTip": "TenByTen\\TenByTen.cpp",
-              "ViewState": "AQIAAM4CAAAAAAAAAAAkwAsDAAAAAAAA",
+              "ViewState": "AQIAAGkCAAAAAAAAAAAmwHACAAA1AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-05-23T00:05:50.163Z",
               "EditorCaption": ""
