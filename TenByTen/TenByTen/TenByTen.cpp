@@ -528,47 +528,6 @@ bool move_and_place_block(char*** m_board, char*** c_board, char*** block) {
         }
     }
 }
-/*
-int remove_lines(char*** board) {
-    int removed = 0;
-    int sum = 0;
-    // 가득 찬 행 삭제
-    for (int row = 0; row < board_row; ++row) {
-        bool full = true;
-        for (int col = 0; col < board_col; ++col) {
-            if (strcmp(board[row][col], " ") == 0) {
-                full = false;
-                break;
-            }
-        }
-        if (full) {
-            ++removed;
-            for (int col = 0; col < board_col; ++col)
-                strcpy_s(board[row][col], 4, " ");
-        }
-    }
-    // 가득 찬 열 삭제
-    for (int col = 0; col < board_col; ++col) {
-        bool full = true;
-        for (int row = 0; row < board_row; ++row) {
-            if (strcmp(board[row][col], " ") == 0) {
-                full = false;
-                break;
-            }
-        }
-        if (full) {
-            ++removed;
-            for (int row = 0; row < board_row; ++row)
-                strcpy_s(board[row][col], 4, " ");
-        }
-    }
-    if (removed > 0) {
-        sum += removed * 10;
-        sum += (removed - 1) * 5;
-    }
-    return sum;
-}
-*/
 
 int remove_lines(char*** board) {
     int remove_line_x[10];  // 최대 10줄까지 제거 가능
