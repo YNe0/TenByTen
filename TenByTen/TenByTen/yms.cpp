@@ -499,13 +499,15 @@ bool can_place_block(char*** m_board, char*** block, int x, int y) {
     return true;
 }
 
-bool move_and_place_block(char*** m_board, char*** c_board, char*** block) {
+bool move_and_place_block(char*** m_board, char*** c_board, char*** block, char*** f_block, char*** s_block, char*** t_block, bool* block_used, int point, int& high_score) {
     int x = 5, y = 5;
     int key = 0;
     while (1) {
         system("cls");
         put_block_with_overlap_check(c_board, m_board, block, x, y);
         draw_board(c_board);
+        point = show_point(point, high_score);
+        show_block(f_block, s_block, t_block, block_used);
         key = key_control();
         int new_x = x, new_y = y;
         switch (key) {
@@ -565,7 +567,6 @@ int remove_lines(char*** board) {
     }
 
     // 가로줄 제거
-    cout << count_x << "x";
     for (int k = 0; k < count_x; ++k) {
         int x = remove_line_x[k];
         for (int j = 0; j < 10; ++j) {
@@ -575,7 +576,6 @@ int remove_lines(char*** board) {
     }
 
     // 세로줄 제거
-    cout << count_y << "y";
     for (int k = 0; k < count_y; ++k) {
         int y = remove_line_y[k];
         for (int i = 0; i < 10; ++i) {
@@ -695,21 +695,24 @@ int main() {
 
                     if (key == k_1) {
                         if (!block_used[0]) {
-                            block_used[0] = move_and_place_block(m_board, c_board, f_block);
+                            block_used[0] = true;
+                            block_used[0] = move_and_place_block(m_board, c_board, f_block, f_block, s_block, t_block, block_used, total_point, high_score);
                             if (block_used[0]) main_block(f_block);
                         }
                         continue;
                     }
                     else if (key == k_2) {
                         if (!block_used[1]) {
-                            block_used[1] = move_and_place_block(m_board, c_board, s_block);
+                            block_used[1] = true;
+                            block_used[1] = move_and_place_block(m_board, c_board, s_block, f_block, s_block, t_block, block_used, total_point, high_score);
                             if (block_used[1]) main_block(s_block);
                         }
                         continue;
                     }
                     else if (key == k_3) {
                         if (!block_used[2]) {
-                            block_used[2] = move_and_place_block(m_board, c_board, t_block);
+                            block_used[2] = true;
+                            block_used[2] = move_and_place_block(m_board, c_board, t_block, f_block, s_block, t_block, block_used, total_point, high_score);
                             if (block_used[2]) main_block(t_block);
                         }
                         continue;
