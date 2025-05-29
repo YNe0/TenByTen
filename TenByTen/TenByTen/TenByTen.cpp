@@ -733,7 +733,7 @@ int main() {
         }
         else if (menu_num == 2) {
             showRanking();
-        }
+        }   
         else if (menu_num == 3) {
             save_high_score(high_score);
             break;
