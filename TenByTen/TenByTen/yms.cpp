@@ -241,7 +241,7 @@ void draw_block(int x, int y, char*** block) {
 
 void show_block(char*** f_block, char*** s_block, char*** t_block, bool* block_used) {
     int x = 70;
-    int y = 6;  
+    int y = 6;
     if (!block_used[0]) {
         gotoxy(x, y);
         cout << "1";
@@ -531,6 +531,18 @@ bool move_and_place_block(char*** m_board, char*** c_board, char*** block, char*
     }
 }
 
+int count_block_cells(char*** block) {
+    int count = 0;
+    for (int i = 0; i < block_row; ++i) {
+        for (int j = 0; j < block_col; ++j) {
+            if (strcmp(block[i][j], "■") == 0) {
+                ++count;
+            }
+        }
+    }
+    return count;
+}
+
 int remove_lines(char*** board) {
     int remove_line_x[10];
     int remove_line_y[10];
@@ -598,14 +610,114 @@ bool all_blocks_unplaceable(char*** board, char*** f_block, char*** s_block, cha
     return true;
 }
 
+void add_random_single_block(char*** board) {
+    int candidates_x[100];
+    int candidates_y[100];
+    int count = 0;
+
+    for (int i = 0; i < board_row; i++) {
+        for (int j = 0; j < board_col; j++) {
+            if (strcmp(board[i][j], " ") == 0) {
+                // 가상 블럭 추가
+                strcpy_s(board[i][j], 4, "■");
+
+                // 가로줄 확인
+                bool full_row = true;
+                for (int k = 0; k < board_col; k++) {
+                    if (strcmp(board[i][k], " ") == 0) {
+                        full_row = false;
+                        break;
+                    }
+                }
+
+                // 세로줄 확인
+                bool full_col = true;
+                for (int k = 0; k < board_row; k++) {
+                    if (strcmp(board[k][j], " ") == 0) {
+                        full_col = false;
+                        break;
+                    }
+                }
+
+                // 원상복구
+                strcpy_s(board[i][j], 4, " ");
+
+                if (!(full_row || full_col)) {
+                    candidates_x[count] = j;
+                    candidates_y[count] = i;
+                    count++;
+                }
+            }
+        }
+    }
+
+    if (count > 0) {
+        int r = rand() % count;
+        int x = candidates_x[r];
+        int y = candidates_y[r];
+        strcpy_s(board[y][x], 4, "■");
+    }
+}
 
 int draw_info() {
+
+
     system("cls");
     int x = 50, y = 8;
     gotoxy(x, y);
-    cout << "→ ← ↑ ↓ 1 2 3";
-    int key = key_control();
-    return key;
+
+    cout << "개요";
+    gotoxy(x - 30, y + 2);
+    cout << "공주대학교 소프트웨어학과 2학년 여민수, 나권엽, 김건희 학생이 C++로 개발한 TenByTen 게임 입니다";
+    gotoxy(x - 15, y + 4);
+    cout << "창의적인 설계와 효율적인 구현이 돋보이는 콘솔 기반 퍼즐 게임입니다.";
+    gotoxy(x - 15, y + 6);
+    cout << "직관적인 조작 방식과 전략적인 요소로 몰입감 있는 경험을 제공합니다.";
+
+    gotoxy(x, y + 20);
+    cout << "Page 1/3";
+    while (true) {
+        int key = key_control();
+        if (key == k_enter) break;
+    }
+
+    system("cls");
+    gotoxy(x, y);
+    cout << "조작 방법";
+    gotoxy(x - 5, y + 2);
+    cout << "커서 이동 : 방향키(↑, ↓, ←, →)";
+    gotoxy(x - 5, y + 3);
+    cout << "블록 선택 : 숫자 키 1, 2, 3";
+    gotoxy(x - 5, y + 4);
+    cout << "블록 배치 : Enter 키";
+    gotoxy(x - 5, y + 20);
+    cout << "Page 2/3";
+
+    while (true) {
+        int key = key_control();
+        if (key == k_enter) break;
+    }
+
+
+    system("cls");
+    gotoxy(x, y);
+    cout << "점수 방법";
+    gotoxy(x - 5, y + 2);
+    cout << "블록 배치 : 블록을 하나 배치할 때마다 1점이 추가됩니다.";
+    gotoxy(x - 5, y + 3);
+    cout << "줄 제거 : 가로 또는 세로로 한 줄을 완성하여 제거할 때마다 10점이 추가됩니다.";
+    gotoxy(x - 5, y + 4);
+    cout << "콤보 시스템 : ";
+    gotoxy(x - 5, y + 20);
+    cout << "Page 3/3 (BackSpace를 이용하여 나가기...)";
+
+    // Backspace 입력 대기
+    while (true) {
+        int key = key_control();
+        if (key == k_back) return k_back;
+
+    }
+
 }
 
 struct Ranking {
@@ -721,7 +833,10 @@ int main() {
                         if (!block_used[0]) {
                             block_used[0] = true;
                             block_used[0] = move_and_place_block(m_board, c_board, f_block, f_block, s_block, t_block, block_used, total_point, high_score);
-                            if (block_used[0]) main_block(f_block);
+                            if (block_used[0]) {
+                                total_point += count_block_cells(f_block);
+                                main_block(f_block);
+                            }
                         }
                         continue;
                     }
@@ -729,7 +844,10 @@ int main() {
                         if (!block_used[1]) {
                             block_used[1] = true;
                             block_used[1] = move_and_place_block(m_board, c_board, s_block, f_block, s_block, t_block, block_used, total_point, high_score);
-                            if (block_used[1]) main_block(s_block);
+                            if (block_used[1]) {
+                                total_point += count_block_cells(s_block);
+                                main_block(s_block);
+                            }
                         }
                         continue;
                     }
@@ -737,7 +855,90 @@ int main() {
                         if (!block_used[2]) {
                             block_used[2] = true;
                             block_used[2] = move_and_place_block(m_board, c_board, t_block, f_block, s_block, t_block, block_used, total_point, high_score);
-                            if (block_used[2]) main_block(t_block);
+                            if (block_used[2]) {
+                                total_point += count_block_cells(t_block);
+                                main_block(t_block);
+                            }
+                        }
+                        continue;
+                    }
+                    else if (key == k_back) {
+                        system("cls");
+                        cout << "\n점수 : " << total_point;
+                        cout << "\n이름을 입력하세요(랭킹 저장): ";
+                        string name; cin >> name;
+                        input_ranking(name, total_point);
+                        save_high_score(high_score);
+                        break;
+                    }
+                }
+            }
+            if (game_num == 1) {
+                total_point = 0; // 스코어 초기화
+                main_board(m_board);
+                bool block_used[3] = { true, true, true };
+
+                while (1) {
+                    total_point += remove_lines(m_board);
+                    draw_board(m_board);
+                    total_point = show_point(total_point, high_score);
+
+                    if (block_used[0] && block_used[1] && block_used[2]) {
+                        create_block(f_block);
+                        create_block(s_block);
+                        create_block(t_block);
+                        block_used[0] = false;
+                        block_used[1] = false;
+                        block_used[2] = false;
+                    }
+
+                    if (all_blocks_unplaceable(m_board, f_block, s_block, t_block, block_used)) {
+                        system("cls");
+                        cout << "\n※ 모든 블록을 배치할 수 없습니다. 게임 오버!";
+                        cout << "\n점수 : " << total_point;
+                        cout << "\n이름을 입력하세요(랭킹 저장): ";
+                        string name; cin >> name;
+                        input_ranking(name, total_point);
+                        save_high_score(high_score);
+                        break;
+                    }
+
+                    show_block(f_block, s_block, t_block, block_used);
+                    key = key_control();
+
+                    if (key == k_1) {
+                        if (!block_used[0]) {
+                            block_used[0] = true;
+                            block_used[0] = move_and_place_block(m_board, c_board, f_block, f_block, s_block, t_block, block_used, total_point, high_score);
+                            if (block_used[0]) {
+                                add_random_single_block(m_board);
+                                total_point += count_block_cells(f_block);
+                                main_block(f_block);
+                            }
+                        }
+                        continue;
+                    }
+                    else if (key == k_2) {
+                        if (!block_used[1]) {
+                            block_used[1] = true;
+                            block_used[1] = move_and_place_block(m_board, c_board, s_block, f_block, s_block, t_block, block_used, total_point, high_score);
+                            if (block_used[1]) {
+                                add_random_single_block(m_board);
+                                total_point += count_block_cells(s_block);
+                                main_block(s_block);
+                            }
+                        }
+                        continue;
+                    }
+                    else if (key == k_3) {
+                        if (!block_used[2]) {
+                            block_used[2] = true;
+                            block_used[2] = move_and_place_block(m_board, c_board, t_block, f_block, s_block, t_block, block_used, total_point, high_score);
+                            if (block_used[2]) {
+                                add_random_single_block(m_board);
+                                total_point += count_block_cells(t_block);
+                                main_block(t_block);
+                            }
                         }
                         continue;
                     }
