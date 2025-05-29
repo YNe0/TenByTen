@@ -532,7 +532,7 @@ bool move_and_place_block(char*** m_board, char*** c_board, char*** block, char*
 }
 
 int remove_lines(char*** board) {
-    int remove_line_x[10];  // 최대 10줄까지 제거 가능
+    int remove_line_x[10];
     int remove_line_y[10];
     int count_x = 0;
     int count_y = 0;
@@ -586,6 +586,18 @@ int remove_lines(char*** board) {
 
     return point;
 }
+
+bool all_blocks_unplaceable(char*** board, char*** f_block, char*** s_block, char*** t_block, bool* block_used) {
+    for (int y = 0; y < board_row; y++) {
+        for (int x = 0; x < board_col; x++) {
+            if (!block_used[0] && can_place_block(board, f_block, x, y)) return false;
+            if (!block_used[1] && can_place_block(board, s_block, x, y)) return false;
+            if (!block_used[2] && can_place_block(board, t_block, x, y)) return false;
+        }
+    }
+    return true;
+}
+
 
 int draw_info() {
     system("cls");
@@ -690,6 +702,17 @@ int main() {
                         block_used[1] = false;
                         block_used[2] = false;
                     }
+
+                    if (all_blocks_unplaceable(m_board, f_block, s_block, t_block, block_used)) {
+                        gotoxy(0, 35);
+                        cout << "\n\n※ 모든 블록을 배치할 수 없습니다. 게임 오버!";
+                        cout << "\n이름을 입력하세요(랭킹 저장): ";
+                        string name; cin >> name;
+                        input_ranking(name, total_point);
+                        save_high_score(high_score);
+                        break;
+                    }
+
                     show_block(f_block, s_block, t_block, block_used);
                     key = key_control();
 
