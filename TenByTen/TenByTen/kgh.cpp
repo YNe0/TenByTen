@@ -543,61 +543,61 @@ int count_block_cells(char*** block) {
     return count;
 }
 
-int remove_lines(char*** board) {
-    int remove_line_x[10];
-    int remove_line_y[10];
-    int count_x = 0;
-    int count_y = 0;
-    int point = 0;
-
-    // 가로줄 검사
-    for (int i = 0; i < 10; ++i) {
-        bool full_row = true;
-        for (int j = 0; j < 10; ++j) {
-            if (strcmp(board[i][j], " ") == 0) {
-                full_row = false;
-                break;
-            }
-        }
-        if (full_row) {
-            remove_line_x[count_x++] = i;
-        }
-    }
-
-    // 세로줄 검사
-    for (int i = 0; i < 10; ++i) {
-        bool full_col = true;
-        for (int j = 0; j < 10; ++j) {
-            if (strcmp(board[j][i], " ") == 0) {
-                full_col = false;
-                break;
-            }
-        }
-        if (full_col) {
-            remove_line_y[count_y++] = i;
-        }
-    }
-
-    // 가로줄 제거
-    for (int k = 0; k < count_x; ++k) {
-        int x = remove_line_x[k];
-        for (int j = 0; j < 10; ++j) {
-            strcpy_s(board[x][j], 4, " ");
-        }
-        point += 10;
-    }
-
-    // 세로줄 제거
-    for (int k = 0; k < count_y; ++k) {
-        int y = remove_line_y[k];
-        for (int i = 0; i < 10; ++i) {
-            strcpy_s(board[i][y], 4, " ");
-        }
-        point += 10;
-    }
-
-    return point;
-}
+//int remove_lines(char*** board) { 이거대신 remove_lines_with_combo 사용
+//    int remove_line_x[10];
+//    int remove_line_y[10];
+//    int count_x = 0;
+//    int count_y = 0;
+//    int point = 0;
+//
+//    // 가로줄 검사
+//    for (int i = 0; i < 10; ++i) {
+//        bool full_row = true;
+//        for (int j = 0; j < 10; ++j) {
+//            if (strcmp(board[i][j], " ") == 0) {
+//                full_row = false;
+//                break;
+//            }
+//        }
+//        if (full_row) {
+//            remove_line_x[count_x++] = i;
+//        }
+//    }
+//
+//    // 세로줄 검사
+//    for (int i = 0; i < 10; ++i) {
+//        bool full_col = true;
+//        for (int j = 0; j < 10; ++j) {
+//            if (strcmp(board[j][i], " ") == 0) {
+//                full_col = false;
+//                break;
+//            }
+//        }
+//        if (full_col) {
+//            remove_line_y[count_y++] = i;
+//        }
+//    }
+//
+//    // 가로줄 제거
+//    for (int k = 0; k < count_x; ++k) {
+//        int x = remove_line_x[k];
+//        for (int j = 0; j < 10; ++j) {
+//            strcpy_s(board[x][j], 4, " ");
+//        }
+//        point += 10;
+//    }
+//
+//    // 세로줄 제거
+//    for (int k = 0; k < count_y; ++k) {
+//        int y = remove_line_y[k];
+//        for (int i = 0; i < 10; ++i) {
+//            strcpy_s(board[i][y], 4, " ");
+//        }
+//        point += 10;
+//    }
+//
+//    return point;
+//}
 
 bool all_blocks_unplaceable(char*** board, char*** f_block, char*** s_block, char*** t_block, bool* block_used) {
     for (int y = 0; y < board_row; y++) {
@@ -847,7 +847,96 @@ void showAllRankings() {
     }
 }
 
-// ... (생략)
+// 콤보 메시지 출력을 위한 전역 변수
+int combo_count = 0;
+int last_remove = 0;
+
+// 콤보 메시지 출력 함수
+void print_combo_message(int combo, int lines) {
+    if (combo > 1) {
+        gotoxy(70, 10);
+        cout << combo << " Combo!" << endl;
+    }
+    if (lines >= 2) {
+        gotoxy(70, 10);
+        if (lines == 2) cout << "Double Line Combo!" << endl;
+        else if (lines == 3) cout << "Triple Line Combo!" << endl;
+        else cout << lines << " Line Combo!" << endl;
+    }
+}
+
+int remove_lines_with_combo(char*** board, int& combo_count, int& last_remove) {
+    int remove_line_x[10];
+    int remove_line_y[10];
+    int count_x = 0;
+    int count_y = 0;
+    int point = 0;
+
+    for (int i = 0; i < 10; ++i) {
+        bool full_row = true;
+        for (int j = 0; j < 10; ++j) {
+            if (strcmp(board[i][j], " ") == 0) {
+                full_row = false;
+                break;
+            }
+        }
+        if (full_row) {
+            remove_line_x[count_x++] = i;
+        }
+    }
+
+    for (int i = 0; i < 10; ++i) {
+        bool full_col = true;
+        for (int j = 0; j < 10; ++j) {
+            if (strcmp(board[j][i], " ") == 0) {
+                full_col = false;
+                break;
+            }
+        }
+        if (full_col) {
+            remove_line_y[count_y++] = i;
+        }
+    }
+
+    int total_lines = count_x + count_y;
+
+    if (total_lines > 0) {
+        if (last_remove > 0) combo_count++;
+        else combo_count = 1;
+        last_remove = total_lines;
+    }
+    else {
+        combo_count = 0;
+        last_remove = 0;
+    }
+
+    for (int k = 0; k < count_x; ++k) {
+        int x = remove_line_x[k];
+        for (int j = 0; j < 10; ++j) {
+            strcpy_s(board[x][j], 4, " ");
+        }
+        point += 10;
+    }
+
+    for (int k = 0; k < count_y; ++k) {
+        int y = remove_line_y[k];
+        for (int i = 0; i < 10; ++i) {
+            strcpy_s(board[i][y], 4, " ");
+        }
+        point += 10;
+    }
+
+    // 콤보 점수 및 메시지
+    if (total_lines > 0) {
+       
+        point += combo_count * 5; // 콤보 보너스 1: 연속 콤보 점수
+        point += (total_lines >= 2) ? (total_lines - 1) * 5 : 0; // 콤보 보너스 2: 다중라인 보너스
+        print_combo_message(combo_count, total_lines);
+        Sleep(700); // 메시지 잠깐 보여주기
+    }
+
+    return point;
+}
 
 int main() {
     srand((unsigned)time(NULL));
@@ -886,7 +975,7 @@ int main() {
                 bool block_used[3] = { true, true, true };
 
                 while (1) {
-                    total_point += remove_lines(m_board);
+                    total_point += remove_lines_with_combo(m_board, combo_count, last_remove);
                     draw_board(m_board);
                     total_point = show_point(total_point, high_score);
 
@@ -963,7 +1052,7 @@ int main() {
                 bool block_used[3] = { true, true, true };
 
                 while (1) {
-                    total_point += remove_lines(m_board);
+                    total_point += remove_lines_with_combo(m_board, combo_count, last_remove);
                     draw_board(m_board);
                     total_point = show_point(total_point, high_score);
 
@@ -1043,7 +1132,7 @@ int main() {
                 bool block_used[3] = { true, true, true };
 
                 while (1) {
-                    total_point += remove_lines(m_board);
+                    total_point += remove_lines_with_combo(m_board, combo_count, last_remove);
                     draw_board(m_board);
                     total_point = show_point(total_point, high_score);
 
