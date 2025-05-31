@@ -660,64 +660,66 @@ void add_random_single_block(char*** board) {
 }
 
 int draw_info() {
-
-
-    system("cls");
     int x = 50, y = 8;
-    gotoxy(x, y);
-
-    cout << "개요";
-    gotoxy(x - 30, y + 2);
-    cout << "공주대학교 소프트웨어학과 2학년 여민수, 나권엽, 김건희 학생이 C++로 개발한 TenByTen 게임 입니다";
-    gotoxy(x - 15, y + 4);
-    cout << "창의적인 설계와 효율적인 구현이 돋보이는 콘솔 기반 퍼즐 게임입니다.";
-    gotoxy(x - 15, y + 6);
-    cout << "직관적인 조작 방식과 전략적인 요소로 몰입감 있는 경험을 제공합니다.";
-
-    gotoxy(x, y + 20);
-    cout << "Page 1/3";
-    while (true) {
-        int key = key_control();
-        if (key == k_enter) break;
-    }
-
-    system("cls");
-    gotoxy(x, y);
-    cout << "조작 방법";
-    gotoxy(x - 5, y + 2);
-    cout << "커서 이동 : 방향키(↑, ↓, ←, →)";
-    gotoxy(x - 5, y + 3);
-    cout << "블록 선택 : 숫자 키 1, 2, 3";
-    gotoxy(x - 5, y + 4);
-    cout << "블록 배치 : Enter 키";
-    gotoxy(x - 5, y + 20);
-    cout << "Page 2/3";
+    int page = 0;
+    const int total_pages = 3;
 
     while (true) {
+        system("cls");
+        switch (page) {
+        case 0:
+            gotoxy(x, y);
+            cout << "=====개요=====";
+            gotoxy(x - 30, y + 2);
+            cout << "공주대학교 소프트웨어학과 2학년 여민수, 나권엽, 김건희 학생이 C++로 개발한 TenByTen 게임 입니다";
+            gotoxy(x - 15, y + 4);
+            cout << "창의적인 설계와 효율적인 구현이 돋보이는 콘솔 기반 퍼즐 게임입니다.";
+            gotoxy(x - 15, y + 6);
+            cout << "직관적인 조작 방식과 전략적인 요소로 몰입감 있는 경험을 제공합니다.";
+            gotoxy(x - 5, y + 20);
+            cout << "Page 1/3  (←/→로 이동, BackSpace로 나가기)";
+            break;
+        case 1:
+            gotoxy(x, y);
+            cout << "=====조작 방법=====";
+            gotoxy(x - 5, y + 2);
+            cout << "커서 이동 : 방향키(↑, ↓, ←, →)";
+            gotoxy(x - 5, y + 3);
+            cout << "블록 선택 : 숫자 키 1, 2, 3";
+            gotoxy(x - 5, y + 4);
+            cout << "블록 배치 : Enter 키";
+            gotoxy(x - 5, y + 20);
+            cout << "Page 2/3  (←/→로 이동, BackSpace로 나가기)";
+            break;
+        case 2:
+            gotoxy(x, y);
+            cout << "=====점수 방법=====";
+            gotoxy(x - 5, y + 2);
+            cout << "블록 배치 : 블록을 하나 배치할 때마다 1점이 추가됩니다.";
+            gotoxy(x - 5, y + 3);
+            cout << "줄 제거 : 가로 또는 세로로 한 줄을 완성하여 제거할 때마다 10점이 추가됩니다.";
+            gotoxy(x, y + 6);
+            cout << "=====콤보 시스템=====";
+            gotoxy(x - 5, y + 7);
+            cout << "1. 라인 콤보 : 여러 줄을 동시에 지울시에 n줄 * 10 점이 추가 됩니다. ";
+            gotoxy(x - 5, y + 8);
+            cout << "2. 연속 콤보 : 연속으로 지울시에 점수 10점이 추가되며, 콤보증가할떄마다 5점씩 추가 증가합니다 ";
+            gotoxy(x - 5, y + 20);
+            cout << "Page 3/3  (←/→로 이동, BackSpace로 나가기)";
+            break;
+        }
+
         int key = key_control();
-        if (key == k_enter) break;
+        if (key == k_right) {
+            page = (page + 1) % total_pages;
+        }
+        else if (key == k_left) {
+            page = (page - 1 + total_pages) % total_pages;
+        }
+        else if (key == k_back) {
+            return k_back;
+        }
     }
-
-
-    system("cls");
-    gotoxy(x, y);
-    cout << "점수 방법";
-    gotoxy(x - 5, y + 2);
-    cout << "블록 배치 : 블록을 하나 배치할 때마다 1점이 추가됩니다.";
-    gotoxy(x - 5, y + 3);
-    cout << "줄 제거 : 가로 또는 세로로 한 줄을 완성하여 제거할 때마다 10점이 추가됩니다.";
-    gotoxy(x - 5, y + 4);
-    cout << "콤보 시스템 : ";
-    gotoxy(x - 5, y + 20);
-    cout << "Page 3/3 (BackSpace를 이용하여 나가기...)";
-
-    // Backspace 입력 대기
-    while (true) {
-        int key = key_control();
-        if (key == k_back) return k_back;
-
-    }
-
 }
 
 struct Ranking {
@@ -847,20 +849,36 @@ void showAllRankings() {
     }
 }
 
+int get_combo_bonus(int combo) {
+    if (combo == 1) return 10;
+    if (combo == 2) return 15;
+    if (combo >= 3) return 20;
+    return 0;
+}
+
+int get_multiline_bonus(int lines) {
+    if (lines == 2) return lines * 10;
+    if (lines == 3) return lines * 10;
+    if (lines >= 4) return lines * 10;
+    return 0;
+}
+
 // 콤보 메시지 출력을 위한 전역 변수
 int combo_count = 0;
 int last_remove = 0;
 
 // 콤보 메시지 출력 함수
 void print_combo_message(int combo, int lines) {
-    if (combo > 1) {
+    if (combo >= 2) {
         gotoxy(70, 10);
-        cout << combo << " Combo!" << endl;
+        cout << combo -1 << " Combo!" << endl;
     }
     if (lines >= 2) {
         gotoxy(70, 10);
         if (lines == 2) cout << "Double Line Combo!" << endl;
         else if (lines == 3) cout << "Triple Line Combo!" << endl;
+        else if (lines == 4) cout << "Quadra Line Combo!" << endl;
+        else if (lines == 5) cout << "Penta Line Combo!" << endl;
         else cout << lines << " Line Combo!" << endl;
     }
 }
@@ -901,8 +919,12 @@ int remove_lines_with_combo(char*** board, int& combo_count, int& last_remove) {
     int total_lines = count_x + count_y;
 
     if (total_lines > 0) {
-        if (last_remove > 0) combo_count++;
-        else combo_count = 1;
+        if (combo_count == 0) {
+            combo_count = 1; // 콤보 시작
+        }
+        else {
+            combo_count++;   // 연속 콤보
+        }
         last_remove = total_lines;
     }
     else {
@@ -928,11 +950,11 @@ int remove_lines_with_combo(char*** board, int& combo_count, int& last_remove) {
 
     // 콤보 점수 및 메시지
     if (total_lines > 0) {
-       
-        point += combo_count * 5; // 콤보 보너스 1: 연속 콤보 점수
-        point += (total_lines >= 2) ? (total_lines - 1) * 5 : 0; // 콤보 보너스 2: 다중라인 보너스
+        point += get_combo_bonus(combo_count); // 연속 콤보 점수
+        point += get_multiline_bonus(total_lines); // 다중라인 콤보 점수
+
         print_combo_message(combo_count, total_lines);
-        Sleep(700); // 메시지 잠깐 보여주기
+        Sleep(700);
     }
 
     return point;
