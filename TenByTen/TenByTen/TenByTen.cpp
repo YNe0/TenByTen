@@ -8,13 +8,17 @@
 #include <ctime>
 #include <string>
 #include <fstream>
+#include <chrono>
 
 using namespace std;
+using namespace std::chrono;
 
 constexpr int board_row = 10;
 constexpr int board_col = 10;
 constexpr int block_row = 5;
 constexpr int block_col = 5;
+const int time_limit = 90;
+int remain_time = 0;
 
 #define k_up 1
 #define k_down 2
@@ -65,6 +69,44 @@ int key_control() {
             }
         }
     }
+}
+
+int key_control(chrono::steady_clock::time_point start_time) {
+    char key;
+    while (1) {
+        // 남은 시간 갱신
+        remain_time = show_time(start_time);
+        if (remain_time <= 0) {
+            return -2;  // 게임 오버 신호용 임의 값
+        }
+
+        // 키가 눌렸는지 확인
+        if (_kbhit()) {
+            key = _getch();
+            switch (key) {
+            case 72: return k_up;      // ↑
+            case 80: return k_down;    // ↓
+            case 75: return k_left;    // ←
+            case 77: return k_right;   // →
+            case 13: return k_enter;   // Enter
+            case '1': return k_1;      // 숫자 1
+            case '2': return k_2;      // 숫자 2
+            case '3': return k_3;      // 숫자 3
+            case 8:  return k_back;    // Backspace
+            default: break;            // 무시
+            }
+        }
+    }
+}
+
+int show_time(steady_clock::time_point start_time) {
+    auto now = steady_clock::now();
+    int elapsed = duration_cast<seconds>(now - start_time).count();
+    int remain_time = time_limit - elapsed;
+    if (remain_time < 0) remain_time = 0;
+    gotoxy(86, 0);
+    cout << "TIME LEFT : " << remain_time << " sec   ";
+    return remain_time;
 }
 
 void allocate_board(char**** board) {
@@ -599,11 +641,9 @@ int get_multiline_bonus(int lines) {
     return 0;
 }
 
-// 콤보 메시지 출력을 위한 전역 변수
 int combo_count = 0;
 int last_remove = 0;
 
-// 콤보 메시지 출력 함수
 void print_combo_message(int combo, int lines) {
     if (combo >= 2) {
         gotoxy(70, 4);
@@ -946,6 +986,52 @@ void showAllRankings() {
         }
         else if (key == k_back) {
             break;
+        }
+    }
+}
+
+//speed mode dragon
+bool move_and_place_block(char*** m_board, char*** c_board, char*** block, char*** f_block, char*** s_block, char*** t_block, bool* block_used, int point, int& high_score, chrono::steady_clock::time_point start_time) {
+    int x = 5, y = 5;
+    int key = 0;
+    while (1) {
+        put_block_with_overlap_check(c_board, m_board, block, x, y);
+        change_board(c_board);
+        point = show_point(point, high_score);
+        show_block(f_block, s_block, t_block, block_used);
+        int remaining = 0;
+        auto now = chrono::steady_clock::now();
+        int elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - start_time).count();
+        remaining = time_limit - elapsed;
+        key = key_control(start_time);
+        // 제한 시간 초과 시 종료
+        if (key == -2) {
+            system("cls");
+            cout << "\n※ 제한 시간이 초과되었습니다! 게임 오버!";
+            cout << "\n점수 : " << point;
+            cout << "\n이름을 입력하세요(랭킹 저장): ";
+            string name; cin >> name;
+            input_ranking(name, point);
+            save_high_score(high_score);
+        }
+        int new_x = x, new_y = y;
+        switch (key) {
+        case k_up:    new_y--; break;
+        case k_down:  new_y++; break;
+        case k_left:  new_x--; break;
+        case k_right: new_x++; break;
+        case k_enter:
+            if (can_place_block(m_board, block, x, y)) {
+                put_block(m_board, block, x, y);
+                set_block(m_board);
+                return true;
+            }
+            continue;
+        case k_back:
+            return false;
+        }
+        if (can_move(m_board, block, new_x, new_y)) {
+            x = new_x; y = new_y;
         }
     }
 }

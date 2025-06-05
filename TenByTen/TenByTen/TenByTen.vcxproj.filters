@@ -2,8 +2,8 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="kgh.cpp" />
-    <ClCompile Include="ngh.cpp" />
     <ClCompile Include="TenByTen.cpp" />
     <ClCompile Include="yms.cpp" />
+    <ClCompile Include="ngy2.cpp" />
   </ItemGroup>
 </Project>
