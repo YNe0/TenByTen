@@ -11,7 +11,7 @@
 #include <chrono>
 using namespace std::chrono;
 using namespace std;
-
+char*** prev_board;
 constexpr int board_row = 10;
 constexpr int board_col = 10;
 constexpr int block_row = 5;
@@ -51,27 +51,45 @@ void clear_screen() {
 }
 
 
+//int key_control() {
+//	char key;
+//	while (1) {
+//		if (_kbhit()) {
+//			key = _getch();
+//			switch (key) {
+//			case 72: return k_up; // 위
+//			case 80: return k_down; // 아래
+//			case 75: return k_left; // 왼쪽
+//			case 77: return k_right; // 오른쪽
+//			case 13: return k_enter; // Enter
+//			case '1': return k_1; // 숫자 1
+//			case '2': return k_2; // 숫자 2
+//			case '3': return k_3; // 숫자 3
+//			case 8:  return k_back; // Backspace
+//			default: break; // 다른 키는 무시
+//			}
+//		}
+//	}
+//}
 
 int key_control() {
-	char key;
-	while (1) {
-		if (_kbhit()) {
-			key = _getch();
-			switch (key) {
-			case 72: return k_up; // 위
-			case 80: return k_down; // 아래
-			case 75: return k_left; // 왼쪽
-			case 77: return k_right; // 오른쪽
-			case 13: return k_enter; // Enter
-			case '1': return k_1; // 숫자 1
-			case '2': return k_2; // 숫자 2
-			case '3': return k_3; // 숫자 3
-			case 8:  return k_back; // Backspace
-			default: break; // 다른 키는 무시
-			}
+	if (_kbhit()) {
+		char key = _getch();
+		switch (key) {
+		case 72: return k_up;    // 위
+		case 80: return k_down;  // 아래
+		case 75: return k_left;  // 왼쪽
+		case 77: return k_right; // 오른쪽
+		case 13: return k_enter; // Enter
+		case '1': return k_1;    // 숫자 1
+		case '2': return k_2;    // 숫자 2
+		case '3': return k_3;    // 숫자 3
+		case 8:  return k_back;  // Backspace
+		default: break;
 		}
 	}
 }
+
 
 void allocate_board(char**** board) {
 	*board = new char** [board_row];
@@ -207,8 +225,11 @@ int game_menu() {
 	return move_menu(x, y, le);
 }
 
-void draw_board(char*** board) {
-	system("cls");
+
+// draw_board 함수 (깜빡임 없는 버전)
+void draw_board_frame() {
+	gotoxy(0, 0); // 콘솔 맨 위로 이동 (덮어쓰기 시작)
+
 	cout << " ";
 	for (int i = 0; i < board_row; ++i) {
 		cout << "_____ ";
@@ -224,17 +245,40 @@ void draw_board(char*** board) {
 
 		cout << "|";
 		for (int j = 0; j < board_row; ++j) {
-			cout << "  " << board[i][j] << "  |";
+			cout << "  " << " " << "  |";
 		}
 		cout << endl;
 
 		cout << "|";
-		for (int i = 0; i < board_row; ++i) {
+		for (int j = 0; j < board_row; ++j) {
 			cout << "_____|";
 		}
 		cout << endl;
 	}
+
+	cout << flush;
 }
+
+void draw_cell(int x, int y, const char* cell_str) {
+	int start_x = x * 6 + 1; // 한 셀 너비 약 6칸, 1칸 여백
+	int start_y = y * 3 - 2; // 한 셀 높이 약 3칸, 1칸 여백
+
+	gotoxy(start_x, start_y);
+	cout << "  " << cell_str << "  ";
+}
+void draw_changed_cells(char*** board, char*** prev_board) {
+	for (int y = 0; y < board_col; ++y) {
+		for (int x = 0; x < board_row; ++x) {
+			if (strcmp(board[y][x], prev_board[y][x]) != 0) {
+				draw_cell(x, y, board[y][x]);  // x, y 순서로 전달 (가로, 세로)
+				strcpy_s(prev_board[y][x], 4, board[y][x]);
+			}
+		}
+	}
+}
+
+
+
 
 void draw_block(int x, int y, char*** block) {
 	for (int i = 0; i < block_row; i++) {
@@ -389,31 +433,35 @@ int show_point(int point, int& high_score) {
 	gotoxy(x, y);
 	cout << "Point : ";
 	gotoxy(x + 8, y);
-	cout << point;
+	cout << point << "   ";  // 이전 출력 잔상 지우기 위해 공백 추가
 
-	// 하이스코어 업데이트
 	if (point > high_score) {
 		high_score = point;
 		gotoxy(x, y + 1);
-		cout << "New High Score!";
+		cout << "New High Score!     ";
 	}
 	gotoxy(x, y + 2);
-	cout << "High Score : " << high_score;
+	cout << "High Score : " << high_score << "    ";
 
+	cout << flush;
 	return point;
 }
 
-
-int show_time(steady_clock::time_point start_time) {
+int show_time(std::chrono::steady_clock::time_point start_time) {
+	using namespace std::chrono;
 	auto now = steady_clock::now();
 	int elapsed = duration_cast<seconds>(now - start_time).count();
 	int remain_time = time_limit - elapsed;
 	if (remain_time < 0) remain_time = 0;
-	gotoxy(86, 0);
-	cout << "TIME LEFT : " << remain_time << " sec   ";
 
+	gotoxy(86, 0);
+	cout << "TIME LEFT : " << remain_time << " sec   ";  // 잔상 방지 공백
+
+	cout << flush;
 	return remain_time;
 }
+
+
 
 
 void save_high_score(int high_score) {
@@ -522,9 +570,8 @@ void move_and_place_block(char*** m_board, char*** c_board, char*** block) {
 	int x = 5, y = 5;
 	int key = 0;
 	while (1) {
-		system("cls");
 		put_block_with_overlap_check(c_board, m_board, block, x, y);
-		draw_board(c_board);
+		draw_changed_cells(c_board, prev_board);
 		key = key_control();
 		int new_x = x, new_y = y;
 		switch (key) {
@@ -688,7 +735,7 @@ int main() {
 	char*** f_block;
 	char*** s_block;
 	char*** t_block;
-
+	allocate_board(&prev_board);
 	allocate_board(&m_board); // 메인 보드
 	allocate_board(&c_board); // 복사용 보드
 	allocate_block(&f_block); // 1번 블럭
@@ -704,20 +751,23 @@ int main() {
 	while (1) {
 		system("cls");
 		draw_title();
+
 		int menu_num = main_menu();
-		/*int menu_num = 0;*/
+
 		if (menu_num == 0) {
-			draw_title();
+			system("cls");
 			int game_num = game_menu();
-			/*int game_num = 0;*/
+
 			if (game_num == 0) {
-				total_point = 0; // 스코어 초기화
+				system("cls");
+				// 클래식 모드 게임 루프
+				total_point = 0;
 				main_board(m_board);
 				bool block_used[3] = { true, true, true };
 
 				while (1) {
 					total_point += remove_lines(m_board);
-					draw_board(m_board);
+					//draw_board(m_board);
 					total_point = show_point(total_point, high_score);
 
 					if (block_used[0] && block_used[1] && block_used[2]) {
@@ -728,7 +778,7 @@ int main() {
 						block_used[1] = false;
 						block_used[2] = false;
 					}
-					//fill_board_full(m_board); // 테스트용
+
 					if (check_game_over(m_board, f_block, s_block, t_block, block_used)) {
 						system("cls");
 						cout << "\n이름을 입력하세요(랭킹 저장): ";
@@ -741,46 +791,49 @@ int main() {
 					show_block(f_block, s_block, t_block, block_used);
 					key = key_control();
 
-					if (key == k_1) {
-						if (!block_used[0]) {
-							move_and_place_block(m_board, c_board, f_block);
-							block_used[0] = true;
-							main_block(f_block);
-						}
+					if (key == k_1 && !block_used[0]) {
+						move_and_place_block(m_board, c_board, f_block);
+						block_used[0] = true;
+						main_block(f_block);
 						continue;
 					}
-					else if (key == k_2) {
-						if (!block_used[1]) {
-							move_and_place_block(m_board, c_board, s_block);
-							block_used[1] = true;
-							main_block(s_block);
-						}
+					if (key == k_2 && !block_used[1]) {
+						move_and_place_block(m_board, c_board, s_block);
+						block_used[1] = true;
+						main_block(s_block);
 						continue;
 					}
-					else if (key == k_3) {
-						if (!block_used[2]) {
-							move_and_place_block(m_board, c_board, t_block);
-							block_used[2] = true;
-							main_block(t_block);
-						}
+					if (key == k_3 && !block_used[2]) {
+						move_and_place_block(m_board, c_board, t_block);
+						block_used[2] = true;
+						main_block(t_block);
 						continue;
 					}
 				}
 			}
 			else if (game_num == 1) {
-				// 하드 모드
+				// 하드 모드 (구현)
 			}
-
 			else if (game_num == 2) {
+				system("cls");
+				// 타임어택 모드
 				int remain_time = 0;
-				total_point = 0; // 스코어 초기화
+				total_point = 0;
 				main_board(m_board);
 				bool block_used[3] = { true, true, true };
 				auto start_time = steady_clock::now();
-
+				bool frame_not_drawn = true;
 				while (1) {
+					// Time Attack 루프 안에서 draw_board() 대신
+					if (frame_not_drawn) {
+						draw_board_frame(); // 전체 프레임 1회 출력 (draw_board_frame 함수 따로 구현 필요)
+						frame_not_drawn = false;
+					}
+
+					draw_changed_cells(m_board, prev_board); // 바뀐 셀만 출력
+
 					total_point += remove_lines(m_board);
-					draw_board(m_board);
+					draw_changed_cells(m_board, prev_board);
 					remain_time = show_time(start_time);
 					total_point = show_point(total_point, high_score);
 
@@ -792,7 +845,7 @@ int main() {
 						block_used[1] = false;
 						block_used[2] = false;
 					}
-					//fill_board_full(m_board); // 테스트용
+
 					if (check_game_over(m_board, f_block, s_block, t_block, block_used) || remain_time <= 0) {
 						system("cls");
 						cout << "\n이름을 입력하세요(랭킹 저장): ";
@@ -805,112 +858,50 @@ int main() {
 					show_block(f_block, s_block, t_block, block_used);
 					key = key_control();
 
-					if (key == k_1) {
-						if (!block_used[0]) {
-							move_and_place_block(m_board, c_board, f_block);
-							block_used[0] = true;
-							main_block(f_block);
-						}
+					if (key == k_1 && !block_used[0]) {
+						move_and_place_block(m_board, c_board, f_block);
+						block_used[0] = true;
+						main_block(f_block);
 						continue;
 					}
-					else if (key == k_2) {
-						if (!block_used[1]) {
-							move_and_place_block(m_board, c_board, s_block);
-							block_used[1] = true;
-							main_block(s_block);
-						}
+					if (key == k_2 && !block_used[1]) {
+						move_and_place_block(m_board, c_board, s_block);
+						block_used[1] = true;
+						main_block(s_block);
 						continue;
 					}
-					else if (key == k_3) {
-						if (!block_used[2]) {
-							move_and_place_block(m_board, c_board, t_block);
-							block_used[2] = true;
-							main_block(t_block);
-						}
+					if (key == k_3 && !block_used[2]) {
+						move_and_place_block(m_board, c_board, t_block);
+						block_used[2] = true;
+						main_block(t_block);
 						continue;
 					}
 				}
-				//}//	int remain_time = 0;
-				//	total_point = 0; // 스코어 초기화
-				//	main_board(m_board);
-				//	bool block_used[3] = { true, true, true };
-				//	auto start_time = steady_clock::now();
-
-				//	while (1) {
-				//		total_point += remove_lines(m_board);
-				//		draw_board(m_board);
-				//		remain_time = show_time(start_time);
-				//		total_point = show_point(total_point, high_score);
-
-				//		if (block_used[0] && block_used[1] && block_used[2]) {
-				//			create_block(f_block);
-				//			create_block(s_block);
-				//			create_block(t_block);
-				//			block_used[0] = false;
-				//			block_used[1] = false;
-				//			block_used[2] = false;
-				//		}
-				//		//fill_board_full(m_board); // 테스트용
-				//		if (check_game_over(m_board, f_block, s_block, t_block, block_used) || remain_time <= 0) {
-				//			system("cls");
-				//			cout << "\n이름을 입력하세요(랭킹 저장): ";
-				//			string name;
-				//			cin >> name;
-				//			input_ranking(name, total_point);
-				//			save_high_score(high_score);
-				//			break;
-				//		}
-				//		show_block(f_block, s_block, t_block, block_used);
-				//		key = key_control();
-
-				//		if (key == k_1) {
-				//			if (!block_used[0]) {
-				//				move_and_place_block(m_board, c_board, f_block);
-				//				block_used[0] = true;
-				//				main_block(f_block);
-				//			}
-				//			continue;
-				//		}
-				//		else if (key == k_2) {
-				//			if (!block_used[1]) {
-				//				move_and_place_block(m_board, c_board, s_block);
-				//				block_used[1] = true;
-				//				main_block(s_block);
-				//			}
-				//			continue;
-				//		}
-				//		else if (key == k_3) {
-				//			if (!block_used[2]) {
-				//				move_and_place_block(m_board, c_board, t_block);
-				//				block_used[2] = true;
-				//				main_block(t_block);
-				//			}
-				//			continue;
-				//		}
-				//	}
-				//}
-			}
-			else if (menu_num == 1) {
-				while (1) {
-					int info_num = draw_info();
-					if (info_num == k_back)
-						break;
-				}
-			}
-			else if (menu_num == 2) {
-				showRanking();
-			}
-			else if (menu_num == 3) {
-				save_high_score(high_score);
-				break;
 			}
 		}
-		deallocate_board(m_board);
-		deallocate_board(c_board);
-		deallocate_block(f_block);
-		deallocate_block(s_block);
-		deallocate_block(t_block);
-
-		return 0;
+		else if (menu_num == 1) {
+			while (1) {
+				int info_num = draw_info();
+				if (info_num == k_back)
+					break;
+			}
+		}
+		else if (menu_num == 2) {
+			showRanking();
+			system("pause"); // 랭킹 보여주고 일시정지 (원하면)
+		}
+		else if (menu_num == 3) {
+			save_high_score(high_score);
+			break; // while문 종료 -> 프로그램 종료
+		}
 	}
+
+	// 프로그램 종료 전에 할당 해제
+	deallocate_board(m_board);
+	deallocate_board(c_board);
+	deallocate_block(f_block);
+	deallocate_block(s_block);
+	deallocate_block(t_block);
+
+	return 0;
 }

@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "D:\\TenByTen\\TenByTen\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|D:\\TenByTen\\TenByTen\\TenByTen\\ngy_test.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\ngy_test.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|D:\\TenByTen\\TenByTen\\TenByTen\\ngh.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\ngh.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
@@ -11,16 +15,16 @@
       "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\TenByTen.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|D:\\TenByTen\\TenByTen\\TenByTen\\KeyDef.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\KeyDef.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|D:\\TenByTen\\TenByTen\\TenByTen\\yms.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\yms.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|D:\\TenByTen\\TenByTen\\TenByTen\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|D:\\TenByTen\\TenByTen\\TenByTen\\Board.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\Board.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|D:\\TenByTen\\TenByTen\\TenByTen\\kgh.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\kgh.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,65 +42,76 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "TenByTen.cpp",
               "DocumentMoniker": "D:\\TenByTen\\TenByTen\\TenByTen\\TenByTen.cpp",
               "RelativeDocumentMoniker": "TenByTen\\TenByTen.cpp",
               "ToolTip": "D:\\TenByTen\\TenByTen\\TenByTen\\TenByTen.cpp",
               "RelativeToolTip": "TenByTen\\TenByTen.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAIMCAAAAAAAAAAAEwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-05-23T01:39:03.706Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-30T01:23:06.523Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ngh.cpp",
-              "DocumentMoniker": "D:\\TenByTen\\TenByTen\\TenByTen\\ngh.cpp",
-              "RelativeDocumentMoniker": "TenByTen\\ngh.cpp",
-              "ToolTip": "D:\\TenByTen\\TenByTen\\TenByTen\\ngh.cpp",
-              "RelativeToolTip": "TenByTen\\ngh.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAcAAAAAAAAAA==",
+              "Title": "ngy_test.cpp",
+              "DocumentMoniker": "D:\\TenByTen\\TenByTen\\TenByTen\\ngy_test.cpp",
+              "RelativeDocumentMoniker": "TenByTen\\ngy_test.cpp",
+              "ToolTip": "D:\\TenByTen\\TenByTen\\TenByTen\\ngy_test.cpp",
+              "RelativeToolTip": "TenByTen\\ngy_test.cpp",
+              "ViewState": "AgIAAC8CAAAAAAAAAAAEwEcCAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-05-23T01:39:03.133Z",
+              "WhenOpened": "2025-05-29T06:24:21.104Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Board.cpp",
-              "DocumentMoniker": "D:\\TenByTen\\TenByTen\\TenByTen\\Board.cpp",
-              "RelativeDocumentMoniker": "TenByTen\\Board.cpp",
-              "ToolTip": "D:\\TenByTen\\TenByTen\\TenByTen\\Board.cpp",
-              "RelativeToolTip": "TenByTen\\Board.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAlAAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "kgh.cpp",
+              "DocumentMoniker": "D:\\TenByTen\\TenByTen\\TenByTen\\kgh.cpp",
+              "RelativeDocumentMoniker": "TenByTen\\kgh.cpp",
+              "ToolTip": "D:\\TenByTen\\TenByTen\\TenByTen\\kgh.cpp",
+              "RelativeToolTip": "TenByTen\\kgh.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-05-23T00:08:42.655Z"
+              "WhenOpened": "2025-05-29T04:30:01.648Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "yms.cpp",
+              "DocumentMoniker": "D:\\TenByTen\\TenByTen\\TenByTen\\yms.cpp",
+              "RelativeDocumentMoniker": "TenByTen\\yms.cpp",
+              "ToolTip": "D:\\TenByTen\\TenByTen\\TenByTen\\yms.cpp",
+              "RelativeToolTip": "TenByTen\\yms.cpp",
+              "ViewState": "AgIAAPwCAAAAAAAAAAAEwKcBAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-05-29T03:58:37.521Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "main.cpp",
               "DocumentMoniker": "D:\\TenByTen\\TenByTen\\TenByTen\\main.cpp",
               "RelativeDocumentMoniker": "TenByTen\\main.cpp",
               "ToolTip": "D:\\TenByTen\\TenByTen\\TenByTen\\main.cpp",
               "RelativeToolTip": "TenByTen\\main.cpp",
-              "ViewState": "AgIAAEQAAAAAAAAAAAApwFYAAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-05-23T00:07:52.227Z"
+              "WhenOpened": "2025-05-26T09:24:22.68Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "KeyDef.h",
-              "DocumentMoniker": "D:\\TenByTen\\TenByTen\\TenByTen\\KeyDef.h",
-              "RelativeDocumentMoniker": "TenByTen\\KeyDef.h",
-              "ToolTip": "D:\\TenByTen\\TenByTen\\TenByTen\\KeyDef.h",
-              "RelativeToolTip": "TenByTen\\KeyDef.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-05-23T00:07:44.643Z"
+              "DocumentIndex": 1,
+              "Title": "ngh.cpp",
+              "DocumentMoniker": "D:\\TenByTen\\TenByTen\\TenByTen\\ngh.cpp",
+              "RelativeDocumentMoniker": "TenByTen\\ngh.cpp",
+              "ToolTip": "D:\\TenByTen\\TenByTen\\TenByTen\\ngh.cpp",
+              "RelativeToolTip": "TenByTen\\ngh.cpp",
+              "ViewState": "AgIAACoDAAAAAAAAAAAlwF4DAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-05-23T01:39:03.133Z"
             }
           ]
         }

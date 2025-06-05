@@ -39,6 +39,9 @@
     <ClCompile Include="ngh.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="ngy_test.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameUtil.h">
