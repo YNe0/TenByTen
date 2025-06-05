@@ -543,13 +543,12 @@ bool can_place_block(char*** m_board, char*** block, int x, int y) {
     return true;
 }
 
-bool move_and_place_block(char*** m_board, char*** c_board, char*** block, char*** f_block, char*** s_block, char*** t_block, bool* block_used, int point, int& high_score) {
+bool move_and_place_block(char*** m_board, char*** c_board, char*** block, char*** f_block, char*** s_block, char*** t_block, bool* block_used) {
     int x = 5, y = 5;
     int key = 0;
     while (1) {
         put_block_with_overlap_check(c_board, m_board, block, x, y);
         change_board(c_board);
-        point = show_point(point, high_score);
         show_block(f_block, s_block, t_block, block_used);
         key = key_control();
         int new_x = x, new_y = y;
@@ -586,14 +585,52 @@ int count_block_cells(char*** block) {
     return count;
 }
 
-int remove_lines(char*** board) {
+int get_combo_bonus(int combo) {
+    if (combo == 1) return 10;
+    if (combo == 2) return 15;
+    if (combo >= 3) return 20;
+    return 0;
+}
+
+int get_multiline_bonus(int lines) {
+    if (lines == 2) return lines * 10;
+    if (lines == 3) return lines * 10;
+    if (lines >= 4) return lines * 10;
+    return 0;
+}
+
+// 콤보 메시지 출력을 위한 전역 변수
+int combo_count = 0;
+int last_remove = 0;
+
+// 콤보 메시지 출력 함수
+void print_combo_message(int combo, int lines) {
+    if (combo >= 2) {
+        gotoxy(70, 4);
+        cout << combo - 1 << " Combo!" << endl;
+    }
+    if (lines >= 2) {
+        gotoxy(70, 4);
+        if (lines == 2) cout << "Double Line Combo!" << endl;
+        else if (lines == 3) cout << "Triple Line Combo!" << endl;
+        else if (lines == 4) cout << "Quadra Line Combo!" << endl;
+        else if (lines == 5) cout << "Penta Line Combo!" << endl;
+        else cout << lines << " Line Combo!" << endl;
+    }
+}
+
+void del_combo_massage() {
+    gotoxy(70, 4);
+    cout << "                                                ";
+}
+
+int remove_lines_with_combo(char*** board, int& combo_count, int& last_remove) {
     int remove_line_x[10];
     int remove_line_y[10];
     int count_x = 0;
     int count_y = 0;
     int point = 0;
 
-    // 가로줄 검사
     for (int i = 0; i < 10; ++i) {
         bool full_row = true;
         for (int j = 0; j < 10; ++j) {
@@ -607,7 +644,6 @@ int remove_lines(char*** board) {
         }
     }
 
-    // 세로줄 검사
     for (int i = 0; i < 10; ++i) {
         bool full_col = true;
         for (int j = 0; j < 10; ++j) {
@@ -621,7 +657,22 @@ int remove_lines(char*** board) {
         }
     }
 
-    // 가로줄 제거
+    int total_lines = count_x + count_y;
+
+    if (total_lines > 0) {
+        if (combo_count == 0) {
+            combo_count = 1; // 콤보 시작
+        }
+        else {
+            combo_count++;   // 연속 콤보
+        }
+        last_remove = total_lines;
+    }
+    else {
+        combo_count = 0;
+        last_remove = 0;
+    }
+
     for (int k = 0; k < count_x; ++k) {
         int x = remove_line_x[k];
         for (int j = 0; j < 10; ++j) {
@@ -630,13 +681,20 @@ int remove_lines(char*** board) {
         point += 10;
     }
 
-    // 세로줄 제거
     for (int k = 0; k < count_y; ++k) {
         int y = remove_line_y[k];
         for (int i = 0; i < 10; ++i) {
             strcpy_s(board[i][y], 4, " ");
         }
         point += 10;
+    }
+
+    // 콤보 점수 및 메시지
+    if (total_lines > 0) {
+        point += get_combo_bonus(combo_count); // 연속 콤보 점수
+        point += get_multiline_bonus(total_lines); // 다중라인 콤보 점수
+
+        print_combo_message(combo_count, total_lines);
     }
     change_board(board);
     return point;
@@ -703,64 +761,66 @@ void add_random_single_block(char*** board) {
 }
 
 int draw_info() {
-
-
-    system("cls");
     int x = 50, y = 8;
-    gotoxy(x, y);
-
-    cout << "개요";
-    gotoxy(x - 30, y + 2);
-    cout << "공주대학교 소프트웨어학과 2학년 여민수, 나권엽, 김건희 학생이 C++로 개발한 TenByTen 게임 입니다";
-    gotoxy(x - 15, y + 4);
-    cout << "창의적인 설계와 효율적인 구현이 돋보이는 콘솔 기반 퍼즐 게임입니다.";
-    gotoxy(x - 15, y + 6);
-    cout << "직관적인 조작 방식과 전략적인 요소로 몰입감 있는 경험을 제공합니다.";
-
-    gotoxy(x, y + 20);
-    cout << "Page 1/3";
-    while (true) {
-        int key = key_control();
-        if (key == k_enter) break;
-    }
-
-    system("cls");
-    gotoxy(x, y);
-    cout << "조작 방법";
-    gotoxy(x - 5, y + 2);
-    cout << "커서 이동 : 방향키(↑, ↓, ←, →)";
-    gotoxy(x - 5, y + 3);
-    cout << "블록 선택 : 숫자 키 1, 2, 3";
-    gotoxy(x - 5, y + 4);
-    cout << "블록 배치 : Enter 키";
-    gotoxy(x - 5, y + 20);
-    cout << "Page 2/3";
+    int page = 0;
+    const int total_pages = 3;
 
     while (true) {
+        system("cls");
+        switch (page) {
+        case 0:
+            gotoxy(x, y);
+            cout << "=====개요=====";
+            gotoxy(x - 30, y + 2);
+            cout << "공주대학교 소프트웨어학과 2학년 여민수, 나권엽, 김건희 학생이 C++로 개발한 TenByTen 게임 입니다.";
+            gotoxy(x - 30, y + 4);
+            cout << "창의적인 설계와 효율적인 구현이 돋보이는 콘솔 기반 퍼즐 게임입니다.";
+            gotoxy(x - 30, y + 6);
+            cout << "직관적인 조작 방식과 전략적인 요소로 몰입감 있는 경험을 제공합니다.";
+            gotoxy(x - 10, y + 20);
+            cout << "Page 1/3  (←/→로 이동, BackSpace로 나가기)";
+            break;
+        case 1:
+            gotoxy(x, y);
+            cout << "=====조작 방법=====";
+            gotoxy(x - 5, y + 2);
+            cout << "커서 이동 : 방향키(↑, ↓, ←, →)";
+            gotoxy(x - 5, y + 3);
+            cout << "블록 선택 : 숫자 키 1, 2, 3";
+            gotoxy(x - 5, y + 4);
+            cout << "블록 배치 : Enter 키";
+            gotoxy(x - 10, y + 20);
+            cout << "Page 2/3  (←/→로 이동, BackSpace로 나가기)";
+            break;
+        case 2:
+            gotoxy(x, y);
+            cout << "=====점수 방법=====";
+            gotoxy(x - 30, y + 2);
+            cout << "블록 배치 : 블록을 하나 배치할 때마다 1점이 추가됩니다.";
+            gotoxy(x - 30, y + 3);
+            cout << "줄 제거 : 가로 또는 세로로 한 줄을 완성하여 제거할 때마다 10점이 추가됩니다.";
+            gotoxy(x, y + 6);
+            cout << "=====콤보 시스템=====";
+            gotoxy(x - 30, y + 7);
+            cout << "1. 라인 콤보 : 여러 줄을 동시에 지울시에 n줄 * 10 점이 추가 됩니다. ";
+            gotoxy(x - 30, y + 8);
+            cout << "2. 연속 콤보 : 연속으로 지울시에 점수 10점이 추가되며, 콤보증가할떄마다 5점씩 추가 증가합니다 ";
+            gotoxy(x - 10, y + 20);
+            cout << "Page 3/3  (←/→로 이동, BackSpace로 나가기)";
+            break;
+        }
+
         int key = key_control();
-        if (key == k_enter) break;
+        if (key == k_right) {
+            page = (page + 1) % total_pages;
+        }
+        else if (key == k_left) {
+            page = (page - 1 + total_pages) % total_pages;
+        }
+        else if (key == k_back) {
+            return k_back;
+        }
     }
-
-
-    system("cls");
-    gotoxy(x, y);
-    cout << "점수 방법";
-    gotoxy(x - 5, y + 2);
-    cout << "블록 배치 : 블록을 하나 배치할 때마다 1점이 추가됩니다.";
-    gotoxy(x - 5, y + 3);
-    cout << "줄 제거 : 가로 또는 세로로 한 줄을 완성하여 제거할 때마다 10점이 추가됩니다.";
-    gotoxy(x - 5, y + 4);
-    cout << "콤보 시스템 : ";
-    gotoxy(x - 5, y + 20);
-    cout << "Page 3/3 (BackSpace를 이용하여 나가기...)";
-
-    // Backspace 입력 대기
-    while (true) {
-        int key = key_control();
-        if (key == k_back) return k_back;
-
-    }
-
 }
 
 struct Ranking {
@@ -768,7 +828,7 @@ struct Ranking {
     int score;
 };
 
-int showRanking() {
+void showRanking() {
     system("cls");
     vector<Ranking> rankings;
     ifstream fin("ranking.txt");
@@ -777,7 +837,6 @@ int showRanking() {
         rankings.push_back(r);
     }
     fin.close();
-    // 내림차순 정렬
     for (size_t i = 0; i < rankings.size(); i++) {
         for (size_t j = 0; j < rankings.size() - 1; j++) {
             if (rankings[j].score < rankings[j + 1].score) {
@@ -791,12 +850,69 @@ int showRanking() {
     for (size_t i = 0; i < rankings.size() && i < 10; i++) {
         cout << i + 1 << "위: " << rankings[i].name << " - " << rankings[i].score << "점" << endl;
     }
-    cout << "\nbackspace를 눌러 뒤로 가기" << endl;
-    int key;
-    while (1) {
-        key = key_control();
-        if (key == k_back)
-            return 9;
+}
+
+void showRankingHard() {
+    system("cls");
+    vector<Ranking> rankings;
+    ifstream fin("ranking_hard.txt");
+    Ranking r;
+    while (fin >> r.name >> r.score) {
+        rankings.push_back(r);
+    }
+    fin.close();
+    for (size_t i = 0; i < rankings.size(); i++) {
+        for (size_t j = 0; j < rankings.size() - 1; j++) {
+            if (rankings[j].score < rankings[j + 1].score) {
+                Ranking temp = rankings[j];
+                rankings[j] = rankings[j + 1];
+                rankings[j + 1] = temp;
+            }
+        }
+    }
+    cout << "=== 하드모드 랭킹 ===" << endl;
+    for (size_t i = 0; i < rankings.size() && i < 10; i++) {
+        cout << i + 1 << "위: " << rankings[i].name << " - " << rankings[i].score << "점" << endl;
+    }
+}
+
+void showRankingSpeed() {
+    system("cls");
+    vector<Ranking> rankings;
+    ifstream fin("ranking_speed.txt");
+    Ranking r;
+    while (fin >> r.name >> r.score) {
+        rankings.push_back(r);
+    }
+    fin.close();
+    for (size_t i = 0; i < rankings.size(); i++) {
+        for (size_t j = 0; j < rankings.size() - 1; j++) {
+            if (rankings[j].score < rankings[j + 1].score) {
+                Ranking temp = rankings[j];
+                rankings[j] = rankings[j + 1];
+                rankings[j + 1] = temp;
+            }
+        }
+    }
+    cout << "=== 스피드모드 랭킹 ===" << endl;
+    for (size_t i = 0; i < rankings.size() && i < 10; i++) {
+        cout << i + 1 << "위: " << rankings[i].name << " - " << rankings[i].score << "점" << endl;
+    }
+}
+
+void input_ranking_hard(string name, int score) {
+    ofstream fout("ranking_hard.txt", ios::app);
+    if (fout.is_open()) {
+        fout << name << " " << score << endl;
+        fout.close();
+    }
+}
+
+void input_ranking_speed(string name, int score) {
+    ofstream fout("ranking_speed.txt", ios::app);
+    if (fout.is_open()) {
+        fout << name << " " << score << endl;
+        fout.close();
     }
 }
 
@@ -805,6 +921,32 @@ void input_ranking(string name, int score) {
     if (fout.is_open()) {
         fout << name << " " << score << endl;
         fout.close();
+    }
+}
+
+void showAllRankings() {
+    int state = 0; // 0: 일반, 1: 하드, 2: 스피드
+    while (true) {
+        if (state == 0) {
+            showRanking();
+        }
+        else if (state == 1) {
+            showRankingHard();
+        }
+        else if (state == 2) {
+            showRankingSpeed();
+        }
+        cout << "\n←/→: 랭킹 이동, Backspace: 뒤로가기" << endl;
+        int key = key_control();
+        if (key == k_right) {
+            state = (state + 1) % 3;
+        }
+        else if (key == k_left) {
+            state = (state + 2) % 3;
+        }
+        else if (key == k_back) {
+            break;
+        }
     }
 }
 
@@ -839,8 +981,8 @@ int main() {
         if (menu_num == 0) {
             draw_title();
             int game_num = game_menu();
-            if (game_num == 0) {
-                total_point = 0; // 스코어 초기화
+            if (game_num == 0) { //일반모드
+                total_point = 0;
                 main_board(m_board);
                 bool block_used[3] = { true, true, true };
                 system("cls");
@@ -848,7 +990,7 @@ int main() {
 
                 while (1) {
                     change_board(m_board);
-                    total_point += remove_lines(m_board);
+                    total_point += remove_lines_with_combo(m_board, combo_count, last_remove);
                     total_point = show_point(total_point, high_score);
 
                     if (block_used[0] && block_used[1] && block_used[2]) {
@@ -876,8 +1018,9 @@ int main() {
 
                     if (key == k_1) {
                         if (!block_used[0]) {
+                            del_combo_massage();
                             block_used[0] = true;
-                            block_used[0] = move_and_place_block(m_board, c_board, f_block, f_block, s_block, t_block, block_used, total_point, high_score);
+                            block_used[0] = move_and_place_block(m_board, c_board, f_block, f_block, s_block, t_block, block_used);
                             if (block_used[0]) {
                                 total_point += count_block_cells(f_block);
                                 main_block(f_block);
@@ -887,8 +1030,9 @@ int main() {
                     }
                     else if (key == k_2) {
                         if (!block_used[1]) {
+                            del_combo_massage();
                             block_used[1] = true;
-                            block_used[1] = move_and_place_block(m_board, c_board, s_block, f_block, s_block, t_block, block_used, total_point, high_score);
+                            block_used[1] = move_and_place_block(m_board, c_board, s_block, f_block, s_block, t_block, block_used);
                             if (block_used[1]) {
                                 total_point += count_block_cells(s_block);
                                 main_block(s_block);
@@ -898,8 +1042,9 @@ int main() {
                     }
                     else if (key == k_3) {
                         if (!block_used[2]) {
+                            del_combo_massage();
                             block_used[2] = true;
-                            block_used[2] = move_and_place_block(m_board, c_board, t_block, f_block, s_block, t_block, block_used, total_point, high_score);
+                            block_used[2] = move_and_place_block(m_board, c_board, t_block, f_block, s_block, t_block, block_used);
                             if (block_used[2]) {
                                 total_point += count_block_cells(t_block);
                                 main_block(t_block);
@@ -918,8 +1063,8 @@ int main() {
                     }
                 }
             }
-            if (game_num == 1) {
-                total_point = 0; // 스코어 초기화
+            if (game_num == 1) { // 하드 모드
+                total_point = 0;
                 main_board(m_board);
                 bool block_used[3] = { true, true, true };
                 system("cls");
@@ -927,7 +1072,7 @@ int main() {
 
                 while (1) {
                     change_board(m_board);
-                    total_point += remove_lines(m_board);
+                    total_point += remove_lines_with_combo(m_board, combo_count, last_remove);
                     total_point = show_point(total_point, high_score);
 
                     if (block_used[0] && block_used[1] && block_used[2]) {
@@ -945,7 +1090,7 @@ int main() {
                         cout << "\n점수 : " << total_point;
                         cout << "\n이름을 입력하세요(랭킹 저장): ";
                         string name; cin >> name;
-                        input_ranking(name, total_point);
+                        input_ranking_hard(name, total_point);
                         save_high_score(high_score);
                         break;
                     }
@@ -955,8 +1100,9 @@ int main() {
 
                     if (key == k_1) {
                         if (!block_used[0]) {
+                            del_combo_massage();
                             block_used[0] = true;
-                            block_used[0] = move_and_place_block(m_board, c_board, f_block, f_block, s_block, t_block, block_used, total_point, high_score);
+                            block_used[0] = move_and_place_block(m_board, c_board, f_block, f_block, s_block, t_block, block_used);
                             if (block_used[0]) {
                                 add_random_single_block(m_board);
                                 total_point += count_block_cells(f_block);
@@ -967,8 +1113,9 @@ int main() {
                     }
                     else if (key == k_2) {
                         if (!block_used[1]) {
+                            del_combo_massage();
                             block_used[1] = true;
-                            block_used[1] = move_and_place_block(m_board, c_board, s_block, f_block, s_block, t_block, block_used, total_point, high_score);
+                            block_used[1] = move_and_place_block(m_board, c_board, s_block, f_block, s_block, t_block, block_used);
                             if (block_used[1]) {
                                 add_random_single_block(m_board);
                                 total_point += count_block_cells(s_block);
@@ -979,8 +1126,9 @@ int main() {
                     }
                     else if (key == k_3) {
                         if (!block_used[2]) {
+                            del_combo_massage();
                             block_used[2] = true;
-                            block_used[2] = move_and_place_block(m_board, c_board, t_block, f_block, s_block, t_block, block_used, total_point, high_score);
+                            block_used[2] = move_and_place_block(m_board, c_board, t_block, f_block, s_block, t_block, block_used);
                             if (block_used[2]) {
                                 add_random_single_block(m_board);
                                 total_point += count_block_cells(t_block);
@@ -994,7 +1142,7 @@ int main() {
                         cout << "\n점수 : " << total_point;
                         cout << "\n이름을 입력하세요(랭킹 저장): ";
                         string name; cin >> name;
-                        input_ranking(name, total_point);
+                        input_ranking_hard(name, total_point);
                         save_high_score(high_score);
                         break;
                     }
@@ -1009,7 +1157,7 @@ int main() {
             }
         }
         else if (menu_num == 2) {
-            showRanking();
+            showAllRankings();
         }
         else if (menu_num == 3) {
             save_high_score(high_score);
