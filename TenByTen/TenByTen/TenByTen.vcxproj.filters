@@ -15,46 +15,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TenByTen.cpp">
+    <ClCompile Include="ngy.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="yms.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameUtil.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Board.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="BlockGame.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="kgh.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ngh.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ngy_test.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="GameUtil.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Board.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="BlockGame.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyDef.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
