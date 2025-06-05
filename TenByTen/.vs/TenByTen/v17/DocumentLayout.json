@@ -5,10 +5,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|C:\\Users\\User\\Documents\\GitHub\\TenByTen\\TenByTen\\TenByTen\\TenByTen\\TenByTen.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\TenByTen.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|C:\\Users\\User\\Documents\\GitHub\\TenByTen\\TenByTen\\TenByTen\\TenByTen\\ngy2.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\ngy2.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,22 +34,9 @@
               "RelativeDocumentMoniker": "TenByTen\\TenByTen.cpp",
               "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\TenByTen\\TenByTen\\TenByTen\\TenByTen\\TenByTen.cpp",
               "RelativeToolTip": "TenByTen\\TenByTen.cpp",
-              "ViewState": "AQIAAAEEAAAAAAAAAAAmwO8DAAAYAAAA",
+              "ViewState": "AQIAAAIFAAAAAAAAAAArwBgFAAA0AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-06-05T06:06:36.613Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ngy2.cpp",
-              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\TenByTen\\TenByTen\\TenByTen\\TenByTen\\ngy2.cpp",
-              "RelativeDocumentMoniker": "TenByTen\\ngy2.cpp",
-              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\TenByTen\\TenByTen\\TenByTen\\TenByTen\\ngy2.cpp",
-              "RelativeToolTip": "TenByTen\\ngy2.cpp",
-              "ViewState": "AQIAACkDAAAAAAAAAAAAAGIDAAAxAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-06-05T06:10:42.011Z",
               "EditorCaption": ""
             }
           ]

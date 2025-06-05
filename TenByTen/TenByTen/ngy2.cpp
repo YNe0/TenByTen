@@ -80,6 +80,7 @@ int key_control() {
         }
     }
 }
+
 int key_control(chrono::steady_clock::time_point start_time) {
     char key;
     while (1) {
@@ -107,6 +108,7 @@ int key_control(chrono::steady_clock::time_point start_time) {
         }
     }
 }
+
 void allocate_board(char**** board) {
     *board = new char** [board_row];
     for (int i = 0; i < board_row; i++) {
@@ -892,6 +894,7 @@ bool move_and_place_block(char*** m_board, char*** c_board, char*** block, char*
         }
     }
 }
+
 int main() {
     srand((unsigned)time(NULL));
     int key = -1;

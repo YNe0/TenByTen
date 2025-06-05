@@ -71,6 +71,16 @@ int key_control() {
     }
 }
 
+int show_time(steady_clock::time_point start_time) {
+    auto now = steady_clock::now();
+    int elapsed = duration_cast<seconds>(now - start_time).count();
+    int remain_time = time_limit - elapsed;
+    if (remain_time < 0) remain_time = 0;
+    gotoxy(86, 0);
+    cout << "TIME LEFT : " << remain_time << " sec   ";
+    return remain_time;
+}
+
 int key_control(chrono::steady_clock::time_point start_time) {
     char key;
     while (1) {
@@ -97,16 +107,6 @@ int key_control(chrono::steady_clock::time_point start_time) {
             }
         }
     }
-}
-
-int show_time(steady_clock::time_point start_time) {
-    auto now = steady_clock::now();
-    int elapsed = duration_cast<seconds>(now - start_time).count();
-    int remain_time = time_limit - elapsed;
-    if (remain_time < 0) remain_time = 0;
-    gotoxy(86, 0);
-    cout << "TIME LEFT : " << remain_time << " sec   ";
-    return remain_time;
 }
 
 void allocate_board(char**** board) {
@@ -650,7 +650,7 @@ void print_combo_message(int combo, int lines) {
         cout << combo - 1 << " Combo!" << endl;
     }
     if (lines >= 2) {
-        gotoxy(70, 4);
+        gotoxy(70, 5);
         if (lines == 2) cout << "Double Line Combo!" << endl;
         else if (lines == 3) cout << "Triple Line Combo!" << endl;
         else if (lines == 4) cout << "Quadra Line Combo!" << endl;
@@ -989,7 +989,6 @@ void showAllRankings() {
         }
     }
 }
-
 //speed mode dragon
 bool move_and_place_block(char*** m_board, char*** c_board, char*** block, char*** f_block, char*** s_block, char*** t_block, bool* block_used, int point, int& high_score, chrono::steady_clock::time_point start_time) {
     int x = 5, y = 5;
@@ -1011,7 +1010,7 @@ bool move_and_place_block(char*** m_board, char*** c_board, char*** block, char*
             cout << "\n점수 : " << point;
             cout << "\n이름을 입력하세요(랭킹 저장): ";
             string name; cin >> name;
-            input_ranking(name, point);
+            input_ranking_speed(name, point);
             save_high_score(high_score);
         }
         int new_x = x, new_y = y;
@@ -1067,7 +1066,8 @@ int main() {
         if (menu_num == 0) {
             draw_title();
             int game_num = game_menu();
-            if (game_num == 0) { //일반모드
+            // classic mode
+            if (game_num == 0) { 
                 total_point = 0;
                 main_board(m_board);
                 bool block_used[3] = { true, true, true };
@@ -1149,7 +1149,8 @@ int main() {
                     }
                 }
             }
-            if (game_num == 1) { // 하드 모드
+            // hard mode
+            if (game_num == 1) {
                 total_point = 0;
                 main_board(m_board);
                 bool block_used[3] = { true, true, true };
@@ -1229,6 +1230,101 @@ int main() {
                         cout << "\n이름을 입력하세요(랭킹 저장): ";
                         string name; cin >> name;
                         input_ranking_hard(name, total_point);
+                        save_high_score(high_score);
+                        break;
+                    }
+                }
+            }
+            //speed mode
+            if (game_num == 2) {
+                total_point = 0;
+                main_board(m_board);
+                bool block_used[3] = { true, true, true };
+                system("cls");
+                draw_board(m_board);
+                auto start_time = chrono::steady_clock::now(); // 시작 시간
+
+                while (1) {
+                    change_board(m_board);
+                    total_point += remove_lines_with_combo(m_board, combo_count, last_remove);
+                    total_point = show_point(total_point, high_score);
+
+                    if (block_used[0] && block_used[1] && block_used[2]) {
+                        create_block(f_block);
+                        create_block(s_block);
+                        create_block(t_block);
+                        block_used[0] = false;
+                        block_used[1] = false;
+                        block_used[2] = false;
+                    }
+
+                    if (all_blocks_unplaceable(m_board, f_block, s_block, t_block, block_used)) {
+                        system("cls");
+                        cout << "\n※ 모든 블록을 배치할 수 없습니다. 게임 오버!";
+                        cout << "\n점수 : " << total_point;
+                        cout << "\n이름을 입력하세요(랭킹 저장): ";
+                        string name; cin >> name;
+                        input_ranking_speed(name, total_point);
+                        save_high_score(high_score);
+                        break;
+                    }
+
+                    show_block(f_block, s_block, t_block, block_used);
+                    key = key_control(start_time);
+
+                    if (key == -2) {
+                        system("cls");
+                        cout << "\n※ 제한 시간이 초과되었습니다! 게임 오버!";
+                        cout << "\n점수 : " << total_point;
+                        cout << "\n이름을 입력하세요(랭킹 저장): ";
+                        string name; cin >> name;
+                        input_ranking_speed(name, total_point);
+                        save_high_score(high_score);
+                        break;
+                    }
+
+                    if (key == k_1) {
+                        if (!block_used[0]) {
+                            del_combo_massage();
+                            block_used[0] = true;
+                            block_used[0] = move_and_place_block(m_board, c_board, f_block, f_block, s_block, t_block, block_used, total_point, high_score, start_time);
+                            if (block_used[0]) {
+                                total_point += count_block_cells(f_block);
+                                main_block(f_block);
+                            }
+                        }
+                        continue;
+                    }
+                    else if (key == k_2) {
+                        if (!block_used[1]) {
+                            del_combo_massage();
+                            block_used[1] = true;
+                            block_used[1] = move_and_place_block(m_board, c_board, s_block, f_block, s_block, t_block, block_used, total_point, high_score, start_time);
+                            if (block_used[1]) {
+                                total_point += count_block_cells(s_block);
+                                main_block(s_block);
+                            }
+                        }
+                        continue;
+                    }
+                    else if (key == k_3) {
+                        if (!block_used[2]) {
+                            del_combo_massage();
+                            block_used[2] = true;
+                            block_used[2] = move_and_place_block(m_board, c_board, t_block, f_block, s_block, t_block, block_used, total_point, high_score, start_time);
+                            if (block_used[2]) {
+                                total_point += count_block_cells(t_block);
+                                main_block(t_block);
+                            }
+                        }
+                        continue;
+                    }
+                    else if (key == k_back) {
+                        system("cls");
+                        cout << "\n점수 : " << total_point;
+                        cout << "\n이름을 입력하세요(랭킹 저장): ";
+                        string name; cin >> name;
+                        input_ranking_speed(name, total_point);
                         save_high_score(high_score);
                         break;
                     }
