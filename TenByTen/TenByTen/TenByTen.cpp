@@ -230,10 +230,20 @@ void draw_board(char*** board) {
     }
 }
 
+void change_board(char*** board) {
+    for (int i = 0; i < board_row; ++i) {
+        for (int j = 0; j < board_col; ++j) {
+            gotoxy(j * 6 + 1, i * 3);
+            cout << "  " << board[i][j];
+        }
+    }
+}
+
 void draw_block(int x, int y, char*** block) {
     for (int i = 0; i < block_row; i++) {
         for (int j = 0; j < block_col; j++) {
-            gotoxy(x + j, y + i); // j가 x축, i가 y축
+            gotoxy(x + j, y + i);
+            cout << "";
             cout << block[i][j];
         }
     }
@@ -243,19 +253,53 @@ void show_block(char*** f_block, char*** s_block, char*** t_block, bool* block_u
     int x = 70;
     int y = 6;
     if (!block_used[0]) {
-        gotoxy(x, y);
+        gotoxy(x - 1, y);
         cout << "1";
         draw_block(x, y, f_block);
     }
+    else {
+        gotoxy(x - 1, y);
+        cout << "1";
+        for (int i = 0; i < block_row; i++) {
+            for (int j = 0; j < block_col; j++) {
+                gotoxy(x + j, y + i);
+                cout << " ";
+            }
+        }
+
+    }
+
     if (!block_used[1]) {
-        gotoxy(x, y + 9);
+        gotoxy(x - 1, y + 9);
         cout << "2";
         draw_block(x, y + 9, s_block);
     }
+    else {
+        gotoxy(x - 1, y + 9);
+        cout << "2";
+        for (int i = 0; i < block_row; i++) {
+            for (int j = 0; j < block_col; j++) {
+                gotoxy(x + j, y + 9 + i);
+                cout << " ";
+            }
+        }
+
+    }
+
     if (!block_used[2]) {
-        gotoxy(x, y + 18);
+        gotoxy(x - 1, y + 18);
         cout << "3";
         draw_block(x, y + 18, t_block);
+    }
+    else {
+        gotoxy(x - 1, y + 18);
+        cout << "3";
+        for (int i = 0; i < block_row; i++) {
+            for (int j = 0; j < block_col; j++) {
+                gotoxy(x + j, y + 18 + i);
+                cout << " ";
+            }
+        }
     }
 }
 
@@ -503,9 +547,8 @@ bool move_and_place_block(char*** m_board, char*** c_board, char*** block, char*
     int x = 5, y = 5;
     int key = 0;
     while (1) {
-        system("cls");
         put_block_with_overlap_check(c_board, m_board, block, x, y);
-        draw_board(c_board);
+        change_board(c_board);
         point = show_point(point, high_score);
         show_block(f_block, s_block, t_block, block_used);
         key = key_control();
@@ -595,7 +638,7 @@ int remove_lines(char*** board) {
         }
         point += 10;
     }
-
+    change_board(board);
     return point;
 }
 
@@ -610,6 +653,54 @@ bool all_blocks_unplaceable(char*** board, char*** f_block, char*** s_block, cha
     return true;
 }
 
+void add_random_single_block(char*** board) {
+    int candidates_x[100];
+    int candidates_y[100];
+    int count = 0;
+
+    for (int i = 0; i < board_row; i++) {
+        for (int j = 0; j < board_col; j++) {
+            if (strcmp(board[i][j], " ") == 0) {
+                // 가상 블럭 추가
+                strcpy_s(board[i][j], 4, "■");
+
+                // 가로줄 확인
+                bool full_row = true;
+                for (int k = 0; k < board_col; k++) {
+                    if (strcmp(board[i][k], " ") == 0) {
+                        full_row = false;
+                        break;
+                    }
+                }
+
+                // 세로줄 확인
+                bool full_col = true;
+                for (int k = 0; k < board_row; k++) {
+                    if (strcmp(board[k][j], " ") == 0) {
+                        full_col = false;
+                        break;
+                    }
+                }
+
+                // 원상복구
+                strcpy_s(board[i][j], 4, " ");
+
+                if (!(full_row || full_col)) {
+                    candidates_x[count] = j;
+                    candidates_y[count] = i;
+                    count++;
+                }
+            }
+        }
+    }
+
+    if (count > 0) {
+        int r = rand() % count;
+        int x = candidates_x[r];
+        int y = candidates_y[r];
+        strcpy_s(board[y][x], 4, "■");
+    }
+}
 
 int draw_info() {
 
@@ -752,10 +843,12 @@ int main() {
                 total_point = 0; // 스코어 초기화
                 main_board(m_board);
                 bool block_used[3] = { true, true, true };
+                system("cls");
+                draw_board(m_board);
 
                 while (1) {
+                    change_board(m_board);
                     total_point += remove_lines(m_board);
-                    draw_board(m_board);
                     total_point = show_point(total_point, high_score);
 
                     if (block_used[0] && block_used[1] && block_used[2]) {
@@ -808,6 +901,88 @@ int main() {
                             block_used[2] = true;
                             block_used[2] = move_and_place_block(m_board, c_board, t_block, f_block, s_block, t_block, block_used, total_point, high_score);
                             if (block_used[2]) {
+                                total_point += count_block_cells(t_block);
+                                main_block(t_block);
+                            }
+                        }
+                        continue;
+                    }
+                    else if (key == k_back) {
+                        system("cls");
+                        cout << "\n점수 : " << total_point;
+                        cout << "\n이름을 입력하세요(랭킹 저장): ";
+                        string name; cin >> name;
+                        input_ranking(name, total_point);
+                        save_high_score(high_score);
+                        break;
+                    }
+                }
+            }
+            if (game_num == 1) {
+                total_point = 0; // 스코어 초기화
+                main_board(m_board);
+                bool block_used[3] = { true, true, true };
+                system("cls");
+                draw_board(m_board);
+
+                while (1) {
+                    change_board(m_board);
+                    total_point += remove_lines(m_board);
+                    total_point = show_point(total_point, high_score);
+
+                    if (block_used[0] && block_used[1] && block_used[2]) {
+                        create_block(f_block);
+                        create_block(s_block);
+                        create_block(t_block);
+                        block_used[0] = false;
+                        block_used[1] = false;
+                        block_used[2] = false;
+                    }
+
+                    if (all_blocks_unplaceable(m_board, f_block, s_block, t_block, block_used)) {
+                        system("cls");
+                        cout << "\n※ 모든 블록을 배치할 수 없습니다. 게임 오버!";
+                        cout << "\n점수 : " << total_point;
+                        cout << "\n이름을 입력하세요(랭킹 저장): ";
+                        string name; cin >> name;
+                        input_ranking(name, total_point);
+                        save_high_score(high_score);
+                        break;
+                    }
+
+                    show_block(f_block, s_block, t_block, block_used);
+                    key = key_control();
+
+                    if (key == k_1) {
+                        if (!block_used[0]) {
+                            block_used[0] = true;
+                            block_used[0] = move_and_place_block(m_board, c_board, f_block, f_block, s_block, t_block, block_used, total_point, high_score);
+                            if (block_used[0]) {
+                                add_random_single_block(m_board);
+                                total_point += count_block_cells(f_block);
+                                main_block(f_block);
+                            }
+                        }
+                        continue;
+                    }
+                    else if (key == k_2) {
+                        if (!block_used[1]) {
+                            block_used[1] = true;
+                            block_used[1] = move_and_place_block(m_board, c_board, s_block, f_block, s_block, t_block, block_used, total_point, high_score);
+                            if (block_used[1]) {
+                                add_random_single_block(m_board);
+                                total_point += count_block_cells(s_block);
+                                main_block(s_block);
+                            }
+                        }
+                        continue;
+                    }
+                    else if (key == k_3) {
+                        if (!block_used[2]) {
+                            block_used[2] = true;
+                            block_used[2] = move_and_place_block(m_board, c_board, t_block, f_block, s_block, t_block, block_used, total_point, high_score);
+                            if (block_used[2]) {
+                                add_random_single_block(m_board);
                                 total_point += count_block_cells(t_block);
                                 main_block(t_block);
                             }
