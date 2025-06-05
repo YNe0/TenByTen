@@ -230,10 +230,20 @@ void draw_board(char*** board) {
     }
 }
 
+void change_board(char*** board) {
+    for (int i = 0; i < board_row; ++i) {
+        for (int j = 0; j < board_col; ++j) {
+            gotoxy(j * 6 + 1, i * 3);
+            cout << "  " << board[i][j];
+        }
+    }
+}
+
 void draw_block(int x, int y, char*** block) {
     for (int i = 0; i < block_row; i++) {
         for (int j = 0; j < block_col; j++) {
-            gotoxy(x + j, y + i); // j가 x축, i가 y축
+            gotoxy(x + j, y + i);
+            cout << "";
             cout << block[i][j];
         }
     }
@@ -243,19 +253,53 @@ void show_block(char*** f_block, char*** s_block, char*** t_block, bool* block_u
     int x = 70;
     int y = 6;
     if (!block_used[0]) {
-        gotoxy(x, y);
+        gotoxy(x - 1, y);
         cout << "1";
         draw_block(x, y, f_block);
     }
+    else {
+        gotoxy(x - 1, y);
+        cout << "1";
+        for (int i = 0; i < block_row; i++) {
+            for (int j = 0; j < block_col; j++) {
+                gotoxy(x + j, y + i);
+                cout << " ";
+            }
+        }
+
+    }
+
     if (!block_used[1]) {
-        gotoxy(x, y + 9);
+        gotoxy(x - 1, y + 9);
         cout << "2";
         draw_block(x, y + 9, s_block);
     }
+    else {
+        gotoxy(x - 1, y + 9);
+        cout << "2";
+        for (int i = 0; i < block_row; i++) {
+            for (int j = 0; j < block_col; j++) {
+                gotoxy(x + j, y + 9 + i);
+                cout << " ";
+            }
+        }
+
+    }
+
     if (!block_used[2]) {
-        gotoxy(x, y + 18);
+        gotoxy(x - 1, y + 18);
         cout << "3";
         draw_block(x, y + 18, t_block);
+    }
+    else {
+        gotoxy(x - 1, y + 18);
+        cout << "3";
+        for (int i = 0; i < block_row; i++) {
+            for (int j = 0; j < block_col; j++) {
+                gotoxy(x + j, y + 18 + i);
+                cout << " ";
+            }
+        }
     }
 }
 
@@ -503,9 +547,8 @@ bool move_and_place_block(char*** m_board, char*** c_board, char*** block, char*
     int x = 5, y = 5;
     int key = 0;
     while (1) {
-        system("cls");
         put_block_with_overlap_check(c_board, m_board, block, x, y);
-        draw_board(c_board);
+        change_board(c_board);
         point = show_point(point, high_score);
         show_block(f_block, s_block, t_block, block_used);
         key = key_control();
@@ -595,7 +638,7 @@ int remove_lines(char*** board) {
         }
         point += 10;
     }
-
+    change_board(board);
     return point;
 }
 
@@ -800,10 +843,12 @@ int main() {
                 total_point = 0; // 스코어 초기화
                 main_board(m_board);
                 bool block_used[3] = { true, true, true };
+                system("cls");
+                draw_board(m_board);
 
                 while (1) {
+                    change_board(m_board);
                     total_point += remove_lines(m_board);
-                    draw_board(m_board);
                     total_point = show_point(total_point, high_score);
 
                     if (block_used[0] && block_used[1] && block_used[2]) {
@@ -877,10 +922,12 @@ int main() {
                 total_point = 0; // 스코어 초기화
                 main_board(m_board);
                 bool block_used[3] = { true, true, true };
+                system("cls");
+                draw_board(m_board);
 
                 while (1) {
+                    change_board(m_board);
                     total_point += remove_lines(m_board);
-                    draw_board(m_board);
                     total_point = show_point(total_point, high_score);
 
                     if (block_used[0] && block_used[1] && block_used[2]) {
