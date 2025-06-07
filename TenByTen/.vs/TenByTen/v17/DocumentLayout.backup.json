@@ -3,8 +3,15 @@
   "WorkspaceRootPath": "D:\\TenByTen\\TenByTen\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|D:\\TenByTen\\TenByTen\\TenByTen\\prototype.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\prototype.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|D:\\TenByTen\\TenByTen\\TenByTen\\ngy.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\ngy.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.43.34808\\include\\sal.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,7 +21,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -22,16 +29,38 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "sal.h",
+              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.43.34808\\include\\sal.h",
+              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.43.34808\\include\\sal.h",
+              "ViewState": "AgIAACIJAAAAAAAAAAAEwDgJAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-06-07T14:23:56.075Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "prototype.cpp",
+              "DocumentMoniker": "D:\\TenByTen\\TenByTen\\TenByTen\\prototype.cpp",
+              "RelativeDocumentMoniker": "TenByTen\\prototype.cpp",
+              "ToolTip": "D:\\TenByTen\\TenByTen\\TenByTen\\prototype.cpp*",
+              "RelativeToolTip": "TenByTen\\prototype.cpp*",
+              "ViewState": "AgIAAOYBAAAAAAAAAAAlwAICAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-06-07T14:21:30.939Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "ngy.cpp",
               "DocumentMoniker": "D:\\TenByTen\\TenByTen\\TenByTen\\ngy.cpp",
               "RelativeDocumentMoniker": "TenByTen\\ngy.cpp",
               "ToolTip": "D:\\TenByTen\\TenByTen\\TenByTen\\ngy.cpp",
               "RelativeToolTip": "TenByTen\\ngy.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAN8BAAAAAAAAAAAAAPsBAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-06-05T05:14:44.62Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-05T05:14:44.62Z"
             }
           ]
         }

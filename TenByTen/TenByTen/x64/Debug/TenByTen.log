@@ -1,12 +1,12 @@
-﻿  ngy.cpp
-D:\TenByTen\TenByTen\TenByTen\ngy.cpp(55,17): warning C4244: '초기화 중': '_Rep'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\TenByTen\TenByTen\TenByTen\ngy.cpp(55,17): warning C4244:         with
-D:\TenByTen\TenByTen\TenByTen\ngy.cpp(55,17): warning C4244:         [
-D:\TenByTen\TenByTen\TenByTen\ngy.cpp(55,17): warning C4244:             _Rep=__int64
-D:\TenByTen\TenByTen\TenByTen\ngy.cpp(55,17): warning C4244:         ]
-D:\TenByTen\TenByTen\TenByTen\ngy.cpp(864,21): warning C4244: '초기화 중': '_Rep'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\TenByTen\TenByTen\TenByTen\ngy.cpp(864,21): warning C4244:         with
-D:\TenByTen\TenByTen\TenByTen\ngy.cpp(864,21): warning C4244:         [
-D:\TenByTen\TenByTen\TenByTen\ngy.cpp(864,21): warning C4244:             _Rep=__int64
-D:\TenByTen\TenByTen\TenByTen\ngy.cpp(864,21): warning C4244:         ]
+﻿  prototype.cpp
+D:\TenByTen\TenByTen\TenByTen\prototype.cpp(78,17): warning C4244: '초기화 중': '_Rep'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\TenByTen\TenByTen\TenByTen\prototype.cpp(78,17): warning C4244:         with
+D:\TenByTen\TenByTen\TenByTen\prototype.cpp(78,17): warning C4244:         [
+D:\TenByTen\TenByTen\TenByTen\prototype.cpp(78,17): warning C4244:             _Rep=__int64
+D:\TenByTen\TenByTen\TenByTen\prototype.cpp(78,17): warning C4244:         ]
+D:\TenByTen\TenByTen\TenByTen\prototype.cpp(950,21): warning C4244: '초기화 중': '_Rep'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\TenByTen\TenByTen\TenByTen\prototype.cpp(950,21): warning C4244:         with
+D:\TenByTen\TenByTen\TenByTen\prototype.cpp(950,21): warning C4244:         [
+D:\TenByTen\TenByTen\TenByTen\prototype.cpp(950,21): warning C4244:             _Rep=__int64
+D:\TenByTen\TenByTen\TenByTen\prototype.cpp(950,21): warning C4244:         ]
   TenByTen.vcxproj -> D:\TenByTen\TenByTen\x64\Debug\TenByTen.exe
