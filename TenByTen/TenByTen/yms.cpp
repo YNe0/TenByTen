@@ -30,21 +30,6 @@ int remain_time = 0;
 #define k_3 8
 #define k_back 9
 
-void set_console_size(int width_px, int height_px) {
-    HWND console = GetConsoleWindow();
-    RECT r;
-    GetWindowRect(console, &r);
-
-    MoveWindow(console, r.left, r.top, width_px, height_px, TRUE);
-
-    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD bufferSize = { (SHORT)(width_px / 8), (SHORT)(height_px / 16) };
-    SetConsoleScreenBufferSize(hOut, bufferSize);
-
-    SMALL_RECT windowSize = { 0, 0, bufferSize.X - 1, bufferSize.Y - 1 };
-    SetConsoleWindowInfo(hOut, TRUE, &windowSize);
-}
-
 void gotoxy(int x, int y) {
     COORD pos = { (SHORT)x, (SHORT)y };
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
@@ -660,23 +645,32 @@ int combo_count = 0;
 int last_remove = 0;
 
 void print_combo_message(int combo, int lines) {
-    if (combo >= 2) {
+    if (combo >= 2 && lines >= 2) {
+        gotoxy(70, 4);
+        cout << combo - 1 << " Combo! \t";
+        if (lines == 2) cout << "Double Line!" << endl;
+        else if (lines == 3) cout << "Triple Line!" << endl;
+        else if (lines == 4) cout << "Quadra Line!" << endl;
+        else if (lines == 5) cout << "Penta Line!" << endl;
+        else cout << lines << " Line!" << endl;
+    }
+    else if (combo >= 2) {
         gotoxy(70, 4);
         cout << combo - 1 << " Combo!" << endl;
     }
-    if (lines >= 2) {
-        gotoxy(70, 5);
-        if (lines == 2) cout << "Double Line Combo!" << endl;
-        else if (lines == 3) cout << "Triple Line Combo!" << endl;
-        else if (lines == 4) cout << "Quadra Line Combo!" << endl;
-        else if (lines == 5) cout << "Penta Line Combo!" << endl;
-        else cout << lines << " Line Combo!" << endl;
+    else if (lines >= 2) {
+        gotoxy(70, 4);
+        if (lines == 2) cout << "Double Line!" << endl;
+        else if (lines == 3) cout << "Triple Line!" << endl;
+        else if (lines == 4) cout << "Quadra Line!" << endl;
+        else if (lines == 5) cout << "Penta Line!" << endl;
+        else cout << lines << " Line!" << endl;
     }
 }
 
 void del_combo_massage() {
     gotoxy(70, 4);
-    cout << "                                                ";
+    cout << "                                               ";
 }
 
 int remove_lines_with_combo(char*** board, int& combo_count, int& last_remove) {
@@ -1051,7 +1045,6 @@ bool move_and_place_block(char*** m_board, char*** c_board, char*** block, char*
 }
 
 int main() {
-    set_console_size(1000, 800);
     srand((unsigned)time(NULL));
     int key = -1;
     int high_score = load_high_score();
@@ -1073,7 +1066,7 @@ int main() {
     main_block(s_block);
     main_block(t_block);
 
-    cursor_view(false);
+    //cursor_view(false);
 
     while (1) {
         system("cls");
