@@ -872,7 +872,6 @@ bool move_and_place_block(char*** m_board, char*** c_board, char*** block, char*
             cout << "\n이름을 입력하세요(랭킹 저장): ";
             string name; cin >> name;
             input_ranking(name, point);
-            save_high_score(high_score);
         }
         int new_x = x, new_y = y;
         switch (key) {
@@ -954,7 +953,6 @@ int main() {
                         cout << "\n이름을 입력하세요(랭킹 저장): ";
                         string name; cin >> name;
                         input_ranking(name, total_point);
-                        save_high_score(high_score);
                         break;
                     }
 
@@ -1000,7 +998,6 @@ int main() {
                         cout << "\n이름을 입력하세요(랭킹 저장): ";
                         string name; cin >> name;
                         input_ranking(name, total_point);
-                        save_high_score(high_score);
                         break;
                     }
                 }
@@ -1033,7 +1030,6 @@ int main() {
                         cout << "\n이름을 입력하세요(랭킹 저장): ";
                         string name; cin >> name;
                         input_ranking(name, total_point);
-                        save_high_score(high_score);
                         break;
                     }
 
@@ -1082,7 +1078,6 @@ int main() {
                         cout << "\n이름을 입력하세요(랭킹 저장): ";
                         string name; cin >> name;
                         input_ranking(name, total_point);
-                        save_high_score(high_score);
                         break;
                     }
                 }
@@ -1116,7 +1111,6 @@ int main() {
                         cout << "\n이름을 입력하세요(랭킹 저장): ";
                         string name; cin >> name;
                         input_ranking(name, total_point);
-                        save_high_score(high_score);
                         break;
                     }
 
@@ -1130,7 +1124,6 @@ int main() {
                         cout << "\n이름을 입력하세요(랭킹 저장): ";
                         string name; cin >> name;
                         input_ranking(name, total_point);
-                        save_high_score(high_score);
                         break;
                     }
 
@@ -1173,7 +1166,6 @@ int main() {
                         cout << "\n이름을 입력하세요(랭킹 저장): ";
                         string name; cin >> name;
                         input_ranking(name, total_point);
-                        save_high_score(high_score);
                         break;
                     }
                 }
