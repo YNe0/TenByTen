@@ -645,23 +645,32 @@ int combo_count = 0;
 int last_remove = 0;
 
 void print_combo_message(int combo, int lines) {
-    if (combo >= 2) {
+    if (combo >= 2 && lines >= 2) {
+        gotoxy(70, 4);
+        cout << combo - 1 << " Combo! \t";
+        if (lines == 2) cout << "Double Line!" << endl;
+        else if (lines == 3) cout << "Triple Line!" << endl;
+        else if (lines == 4) cout << "Quadra Line!" << endl;
+        else if (lines == 5) cout << "Penta Line!" << endl;
+        else cout << lines << " Line!" << endl;
+    }
+    else if (combo >= 2) {
         gotoxy(70, 4);
         cout << combo - 1 << " Combo!" << endl;
     }
-    if (lines >= 2) {
-        gotoxy(70, 5);
-        if (lines == 2) cout << "Double Line Combo!" << endl;
-        else if (lines == 3) cout << "Triple Line Combo!" << endl;
-        else if (lines == 4) cout << "Quadra Line Combo!" << endl;
-        else if (lines == 5) cout << "Penta Line Combo!" << endl;
-        else cout << lines << " Line Combo!" << endl;
+    else if (lines >= 2) {
+        gotoxy(70, 4);
+        if (lines == 2) cout << "Double Line!" << endl;
+        else if (lines == 3) cout << "Triple Line!" << endl;
+        else if (lines == 4) cout << "Quadra Line!" << endl;
+        else if (lines == 5) cout << "Penta Line!" << endl;
+        else cout << lines << " Line!" << endl;
     }
 }
 
 void del_combo_massage() {
     gotoxy(70, 4);
-    cout << "                                                ";
+    cout << "                                               ";
 }
 
 int remove_lines_with_combo(char*** board, int& combo_count, int& last_remove) {
@@ -1057,7 +1066,7 @@ int main() {
     main_block(s_block);
     main_block(t_block);
 
-    cursor_view(false);
+    //cursor_view(false);
 
     while (1) {
         system("cls");
@@ -1067,7 +1076,7 @@ int main() {
             draw_title();
             int game_num = game_menu();
             // classic mode
-            if (game_num == 0) { 
+            if (game_num == 0) {
                 total_point = 0;
                 main_board(m_board);
                 bool block_used[3] = { true, true, true };
