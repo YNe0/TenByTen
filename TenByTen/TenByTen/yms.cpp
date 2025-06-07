@@ -483,20 +483,20 @@ int show_point(int point, int& high_score) {
     return point;
 }
 
-void save_high_score(int high_score) {
-    ofstream file("highscore.txt");
-    if (file.is_open()) {
-        file << high_score;
-        file.close();
-    }
-}
-
-int load_high_score() {
-    ifstream file("highscore.txt");
+int load_high_score(const string& mode) {
+    string filename = "ranking_" + mode + ".txt";
+    ifstream fin(filename);
     int high_score = 0;
-    if (file.is_open()) {
-        file >> high_score;
-        file.close();
+    string name;
+    int score;
+
+    if (fin.is_open()) {
+        while (fin >> name >> score) {
+            if (score > high_score) {
+                high_score = score;
+            }
+        }
+        fin.close();
     }
     return high_score;
 }
@@ -966,38 +966,66 @@ void input_ranking_speed(string name, int score) {
 }
 
 void input_ranking(string name, int score) {
-    ofstream fout("ranking.txt", ios::app);
+    ofstream fout("ranking_classic.txt", ios::app);
     if (fout.is_open()) {
         fout << name << " " << score << endl;
         fout.close();
     }
 }
 
-void showAllRankings() {
-    int state = 0; // 0: 일반, 1: 하드, 2: 스피드
-    while (true) {
-        if (state == 0) {
-            showRanking();
+void showRankingByMode(const string& mode) {
+    system("cls");
+    vector<Ranking> rankings;
+    ifstream fin("ranking_" + mode + ".txt");
+    Ranking r;
+
+    while (fin >> r.name >> r.score) {
+        rankings.push_back(r);
+    }
+    fin.close();
+
+    for (size_t i = 0; i < rankings.size(); i++) {
+        for (size_t j = 0; j < rankings.size() - 1; j++) {
+            if (rankings[j].score < rankings[j + 1].score) {
+                Ranking temp = rankings[j];
+                rankings[j] = rankings[j + 1];
+                rankings[j + 1] = temp;
+            }
         }
-        else if (state == 1) {
-            showRankingHard();
-        }
-        else if (state == 2) {
-            showRankingSpeed();
-        }
-        cout << "\n←/→: 랭킹 이동, Backspace: 뒤로가기" << endl;
-        int key = key_control();
-        if (key == k_right) {
-            state = (state + 1) % 3;
-        }
-        else if (key == k_left) {
-            state = (state + 2) % 3;
-        }
-        else if (key == k_back) {
-            break;
+    }
+
+    if (mode == "classic") cout << "=== 클래식 모드 랭킹 ===" << endl;
+    else if (mode == "hard") cout << "=== 하드 모드 랭킹 ===" << endl;
+    else if (mode == "speed") cout << "=== 스피드 모드 랭킹 ===" << endl;
+
+    if (rankings.empty()) {
+        cout << "등록된 랭킹이 없습니다." << endl;
+    }
+    else {
+        for (size_t i = 0; i < rankings.size() && i < 10; i++) {
+            cout << i + 1 << "위: " << rankings[i].name << " - " << rankings[i].score << "점" << endl;
         }
     }
 }
+
+void showAllRankings() {
+    int state = 0;
+    const string modes[3] = { "classic", "hard", "speed" };
+
+    while (true) {
+        showRankingByMode(modes[state]);
+        cout << "\n←/→: 랭킹 이동, Backspace: 뒤로가기" << endl;
+
+        int key = key_control();
+        if (key == k_right)
+            state = (state + 1) % 3;
+        else if (key == k_left)
+            state = (state + 2) % 3;
+        else if (key == k_back)
+            break;
+    }
+}
+
 //speed mode dragon
 bool move_and_place_block(char*** m_board, char*** c_board, char*** block, char*** f_block, char*** s_block, char*** t_block, bool* block_used, int point, int& high_score, chrono::steady_clock::time_point start_time) {
     int x = 5, y = 5;
