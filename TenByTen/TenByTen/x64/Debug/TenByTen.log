@@ -1,13 +1,12 @@
-﻿  TenByTen.cpp
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(76,17): warning C4244: '초기화 중': '_Rep'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(76,17): warning C4244:         with
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(76,17): warning C4244:         [
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(76,17): warning C4244:             _Rep=__int64
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(76,17): warning C4244:         ]
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(1004,21): warning C4244: '초기화 중': '_Rep'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(1004,21): warning C4244:         with
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(1004,21): warning C4244:         [
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(1004,21): warning C4244:             _Rep=__int64
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(1004,21): warning C4244:         ]
-  LINK : C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\x64\Debug\TenByTen.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
-  TenByTen.vcxproj -> C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\x64\Debug\TenByTen.exe
+﻿  yms.cpp
+C:\Users\duals\OneDrive\문서\GitHub\TenByTen\TenByTen\TenByTen\yms.cpp(91,17): warning C4244: '초기화 중': '_Rep'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\duals\OneDrive\문서\GitHub\TenByTen\TenByTen\TenByTen\yms.cpp(91,17): warning C4244:         with
+C:\Users\duals\OneDrive\문서\GitHub\TenByTen\TenByTen\TenByTen\yms.cpp(91,17): warning C4244:         [
+C:\Users\duals\OneDrive\문서\GitHub\TenByTen\TenByTen\TenByTen\yms.cpp(91,17): warning C4244:             _Rep=__int64
+C:\Users\duals\OneDrive\문서\GitHub\TenByTen\TenByTen\TenByTen\yms.cpp(91,17): warning C4244:         ]
+C:\Users\duals\OneDrive\문서\GitHub\TenByTen\TenByTen\TenByTen\yms.cpp(1018,21): warning C4244: '초기화 중': '_Rep'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\duals\OneDrive\문서\GitHub\TenByTen\TenByTen\TenByTen\yms.cpp(1018,21): warning C4244:         with
+C:\Users\duals\OneDrive\문서\GitHub\TenByTen\TenByTen\TenByTen\yms.cpp(1018,21): warning C4244:         [
+C:\Users\duals\OneDrive\문서\GitHub\TenByTen\TenByTen\TenByTen\yms.cpp(1018,21): warning C4244:             _Rep=__int64
+C:\Users\duals\OneDrive\문서\GitHub\TenByTen\TenByTen\TenByTen\yms.cpp(1018,21): warning C4244:         ]
+  TenByTen.vcxproj -> C:\Users\duals\OneDrive\문서\GitHub\TenByTen\TenByTen\x64\Debug\TenByTen.exe
