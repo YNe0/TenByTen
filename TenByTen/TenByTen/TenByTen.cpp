@@ -110,6 +110,7 @@ int main() {
         system("cls");
         draw_title();
         int menu_num = main_menu();
+        // game
         if (menu_num == 0) {
             draw_title();
             int game_num = game_menu();
@@ -364,6 +365,7 @@ int main() {
                 }
             }
         }
+        // info
         else if (menu_num == 1) {
             while (1) {
                 int info_num = draw_info();
@@ -371,9 +373,11 @@ int main() {
                     break;
             }
         }
+        // Rankings
         else if (menu_num == 2) {
             showAllRankings();
         }
+        // end
         else if (menu_num == 3) {
             break;
         }
