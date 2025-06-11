@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\duals\\OneDrive\\\uBB38\uC11C\\GitHub\\TenByTen\\TenByTen\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|C:\\Users\\duals\\OneDrive\\\uBB38\uC11C\\GitHub\\TenByTen\\TenByTen\\TenByTen\\yms.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\yms.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|C:\\Users\\duals\\OneDrive\\\uBB38\uC11C\\GitHub\\TenByTen\\TenByTen\\TenByTen\\TenByTen.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\TenByTen.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|C:\\Users\\duals\\OneDrive\\\uBB38\uC11C\\GitHub\\TenByTen\\TenByTen\\TenByTen\\ngy2.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\ngy2.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|C:\\Users\\duals\\OneDrive\\\uBB38\uC11C\\GitHub\\TenByTen\\TenByTen\\TenByTen\\yms.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EADBDFA6-08D4-4E31-BE2D-0E027E77BE0A}|TenByTen\\TenByTen.vcxproj|solutionrelative:TenByTen\\yms.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,43 +22,43 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "ngy2.cpp",
               "DocumentMoniker": "C:\\Users\\duals\\OneDrive\\\uBB38\uC11C\\GitHub\\TenByTen\\TenByTen\\TenByTen\\ngy2.cpp",
               "RelativeDocumentMoniker": "TenByTen\\ngy2.cpp",
               "ToolTip": "C:\\Users\\duals\\OneDrive\\\uBB38\uC11C\\GitHub\\TenByTen\\TenByTen\\TenByTen\\ngy2.cpp",
               "RelativeToolTip": "TenByTen\\ngy2.cpp",
-              "ViewState": "AgIAAAwBAAAAAAAAAAAAAFkBAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAKgEAAAAAAAAAAAlwMIEAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-06-07T16:20:16.205Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "yms.cpp",
               "DocumentMoniker": "C:\\Users\\duals\\OneDrive\\\uBB38\uC11C\\GitHub\\TenByTen\\TenByTen\\TenByTen\\yms.cpp",
               "RelativeDocumentMoniker": "TenByTen\\yms.cpp",
               "ToolTip": "C:\\Users\\duals\\OneDrive\\\uBB38\uC11C\\GitHub\\TenByTen\\TenByTen\\TenByTen\\yms.cpp",
               "RelativeToolTip": "TenByTen\\yms.cpp",
-              "ViewState": "AgIAAEEFAAAAAAAAAAAAAG0FAAAeAAAAAAAAAA==",
+              "ViewState": "AgIAADwFAAAAAAAAAAAiwG0FAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-06-07T15:43:07.098Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "TenByTen.cpp",
               "DocumentMoniker": "C:\\Users\\duals\\OneDrive\\\uBB38\uC11C\\GitHub\\TenByTen\\TenByTen\\TenByTen\\TenByTen.cpp",
               "RelativeDocumentMoniker": "TenByTen\\TenByTen.cpp",
               "ToolTip": "C:\\Users\\duals\\OneDrive\\\uBB38\uC11C\\GitHub\\TenByTen\\TenByTen\\TenByTen\\TenByTen.cpp",
               "RelativeToolTip": "TenByTen\\TenByTen.cpp",
-              "ViewState": "AgIAAIUCAAAAAAAAAAAAAMgDAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAACAFAAAAAAAAAAAUwDAFAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-06-05T06:06:36.613Z",
               "EditorCaption": ""
