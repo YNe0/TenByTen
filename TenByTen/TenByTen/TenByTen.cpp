@@ -83,7 +83,6 @@ void showAllRankings();
 bool move_and_place_block(char*** m_board, char*** c_board, char*** block, char*** f_block, char*** s_block, char*** t_block, bool* block_used, int point, int& high_score, chrono::steady_clock::time_point start_time);
 
 int main() {
-    //system("mode con cols=120 lines=40");
     srand((unsigned)time(NULL));
     int key = -1;
     int total_point = 0;
@@ -194,7 +193,7 @@ int main() {
                 }
             }
             // hard mode
-            if (game_num == 1) {
+            else if (game_num == 1) {
                 total_point = 0;
                 main_board(m_board);
                 bool block_used[3] = { true, true, true };
@@ -276,7 +275,7 @@ int main() {
                 }
             }
             //speed mode
-            if (game_num == 2) {
+            else if (game_num == 2) {
                 total_point = 0;
                 main_board(m_board);
                 bool block_used[3] = { true, true, true };
@@ -363,6 +362,10 @@ int main() {
                         break;
                     }
                 }
+            }
+            // back
+            else if (game_num == 3 || game_num == k_back) {
+                continue;
             }
         }
         // info
@@ -571,6 +574,8 @@ int move_menu(int x, int y, int le) {
             break;
         case k_enter:
             return y1 - y;
+        case k_back:
+            return k_back;
         }
     }
 }
@@ -1186,7 +1191,7 @@ int draw_info() {
         switch (page) {
         case 0:
             gotoxy(x, y);
-            cout << "=====개요=====";
+            cout << "=====   개 요   =====";
             gotoxy(x - 30, y + 2);
             cout << "공주대학교 소프트웨어학과 2학년 여민수, 나권엽, 김건희 학생이 C++로 개발한 TenByTen 게임 입니다.";
             gotoxy(x - 30, y + 4);
@@ -1198,7 +1203,7 @@ int draw_info() {
             break;
         case 1:
             gotoxy(x, y);
-            cout << "=====조작 방법=====";
+            cout << "===== 조작 방법 =====";
             gotoxy(x - 5, y + 2);
             cout << "커서 이동 : 방향키(↑, ↓, ←, →)";
             gotoxy(x - 5, y + 3);
@@ -1210,7 +1215,7 @@ int draw_info() {
             break;
         case 2:
             gotoxy(x, y);
-            cout << "=====점수 방법=====";
+            cout << "===== 점수 방법 =====";
             gotoxy(x - 30, y + 2);
             cout << "블록 배치 : 블록을 하나 배치할 때마다 1점이 추가됩니다.";
             gotoxy(x - 30, y + 3);
@@ -1220,7 +1225,7 @@ int draw_info() {
             gotoxy(x - 30, y + 7);
             cout << "1. 라인 콤보 : 여러 줄을 동시에 지울시에 n줄 * 10 점이 추가 됩니다. ";
             gotoxy(x - 30, y + 8);
-            cout << "2. 연속 콤보 : 연속으로 지울시에 점수 10점이 추가되며, 콤보증가할마다 5점씩 추가 증가합니다 ";
+            cout << "2. 연속 콤보 : 연속으로 지울시에 점수 10점이 추가되며, 콤보증가할때마다 5점씩 추가 증가합니다 ";
             gotoxy(x - 10, y + 20);
             cout << "Page 3/3  (←/→로 이동, BackSpace로 나가기)";
             break;
