@@ -311,12 +311,6 @@ int main() {
                     key = key_control(start_time);
 
                     if (key == -2) {
-                        system("cls");
-                        cout << "\n※ 제한 시간이 초과되었습니다! 게임 오버!";
-                        cout << "\n점수 : " << total_point;
-                        cout << "\n이름을 입력하세요(랭킹 저장): ";
-                        string name; cin >> name;
-                        input_ranking(mode, name, total_point);
                         break;
                     }
 
@@ -1004,15 +998,19 @@ int count_block_cells(char*** block) {
 
 int get_combo_bonus(int combo) {
     if (combo == 1) return 10;
-    if (combo == 2) return 15;
-    if (combo >= 3) return 20;
+    if (combo == 2) return 20;
+    if (combo == 3) return 30;
+    if (combo == 4) return 50;
+    if (combo >= 5) return 80;
     return 0;
 }
 
 int get_multiline_bonus(int lines) {
-    if (lines == 2) return lines * 10;
-    if (lines == 3) return lines * 10;
-    if (lines >= 4) return lines * 10;
+    if (lines == 2) return 10;
+    if (lines == 3) return 15;
+    if (lines == 4) return 20;
+    if (lines == 5) return 30;
+    if (lines == 6) return 50;
     return 0;
 }
 
@@ -1321,6 +1319,7 @@ bool move_and_place_block(char*** m_board, char*** c_board, char*** block, char*
             cout << "\n이름을 입력하세요(랭킹 저장): ";
             string name; cin >> name;
             input_ranking(mode, name, point);
+            break;
         }
         int new_x = x, new_y = y;
         switch (key) {

@@ -1,12 +1,1 @@
-﻿  TenByTen.cpp
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(441,17): warning C4244: '초기화 중': '_Rep'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(441,17): warning C4244:         with
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(441,17): warning C4244:         [
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(441,17): warning C4244:             _Rep=__int64
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(441,17): warning C4244:         ]
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(1313,21): warning C4244: '초기화 중': '_Rep'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(1313,21): warning C4244:         with
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(1313,21): warning C4244:         [
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(1313,21): warning C4244:             _Rep=__int64
-C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\TenByTen\TenByTen.cpp(1313,21): warning C4244:         ]
-  TenByTen.vcxproj -> C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\x64\Debug\TenByTen.exe
+﻿  TenByTen.vcxproj -> C:\Users\User\Documents\GitHub\TenByTen\TenByTen\TenByTen\x64\Debug\TenByTen.exe

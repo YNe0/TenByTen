@@ -1,1 +1,2 @@
-score 100
+score 300
+
